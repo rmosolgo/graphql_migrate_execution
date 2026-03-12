@@ -4,6 +4,7 @@ module GraphqlMigrateExecution
     DESCRIPTION = <<~DESC
     These fields can be migrated to a `.load_all` call.
     DESC
+    self.color = :GREEN
 
     def add_future(field_definition, new_source)
       inject_resolve_keyword(new_source, field_definition, :resolve_batch)

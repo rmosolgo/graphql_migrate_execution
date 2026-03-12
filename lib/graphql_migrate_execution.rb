@@ -22,10 +22,19 @@ require "irb"
 
 module GraphqlMigrateExecution
   class Migration
-    def initialize(glob, skip_description: false, colorable: IRB::Color.colorable?)
+    def initialize(glob, concise: false, migrate: false, cleanup: false, only: nil, implicit: nil, colorable: IRB::Color.colorable?)
       @glob = glob
-      @skip_description = skip_description
+      @skip_description = concise
       @colorable = colorable
+      @only = only
+      @implicit = implicit
+      @action_class = if migrate
+        AddFuture
+      elsif cleanup
+        RemoveLegacy
+      else
+        Analyze
+      end
     end
 
     attr_reader :skip_description, :colorable
@@ -34,7 +43,7 @@ module GraphqlMigrateExecution
     def run
       Dir.glob(@glob).each do |filepath|
         source = File.read(filepath)
-        file_migrate = Analyze.new(self, filepath, source)
+        file_migrate = @action_class.new(self, filepath, source)
         puts file_migrate.run
       end
     end

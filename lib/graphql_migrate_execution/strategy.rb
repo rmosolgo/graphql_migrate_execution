@@ -7,6 +7,10 @@ module GraphqlMigrateExecution
     def remove_legacy(field_definition, new_source)
     end
 
+    class << self
+      attr_accessor :color
+    end
+
     private
 
     def inject_resolve_keyword(new_source, field_definition, keyword)
@@ -17,7 +21,7 @@ module GraphqlMigrateExecution
     def inject_field_keyword(new_source, field_definition, keyword, value)
       field_definition_source = field_definition.source
       new_definition_source = if field_definition_source[/ [a-z_]+:/] # Does it already have keywords?
-        field_definition_source.sub(/field(.*) ([a-z_]+:.*)$/, "field\\1 #{keyword}: #{value}, \\2")
+        field_definition_source.sub(/(field.*)( do| {)?$/, "\\1, #{keyword}: #{value}\\2")
       else
         field_definition_source + ", #{keyword}: #{value}"
       end

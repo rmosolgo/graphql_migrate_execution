@@ -7,5 +7,7 @@ module GraphqlMigrateExecution
       - `--preserve-implicit`: Don't add any new configuration; use GraphQL-Ruby's future direct method send behavior (ie `object.public_send(field_name, **arguments)`)
       - `--shim-implicit`: Add a method to preserve GraphQL-Ruby's previous dynamic implicit behavior (ie, checking for `respond_to?` and `key?`)
     DESC
+
+    self.color = :YELLOW
   end
 end

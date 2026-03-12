@@ -4,6 +4,7 @@ module GraphqlMigrateExecution
     DESCRIPTION = <<~DESC
     These fields can use a `dataload: ...` configuration.
     DESC
+    self.color = :GREEN
 
     def add_future(field_definition, new_source)
       rm = field_definition.resolver_method

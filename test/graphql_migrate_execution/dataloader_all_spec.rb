@@ -68,7 +68,9 @@ describe "DataloaderAll migration strategy" do
   it "turns request calls to list calls" do
     expected_result = <<~RUBY
     class Thing < BaseObject
-      field :user_points, Integer, resolve_batch: :get_user_points, resolver_method: :get_user_points
+      field :user_points, Integer, resolver_method: :get_user_points, resolve_batch: :get_user_points do
+        argument :mode, String
+      end
 
       def self.get_user_points objects, context, mode:
         context.dataload_all(Sources::UserPoints, mode, objects)
@@ -82,7 +84,9 @@ describe "DataloaderAll migration strategy" do
 
     assert_equal expected_result, add_future(<<~RUBY)
     class Thing < BaseObject
-      field :user_points, Integer, resolver_method: :get_user_points
+      field :user_points, Integer, resolver_method: :get_user_points do
+        argument :mode, String
+      end
 
       def get_user_points mode:
         dataloader.with(Sources::UserPoints, mode).request(object)

@@ -2,6 +2,7 @@
 module GraphqlMigrateExecution
   class ResolveEach < Strategy
     DESCRIPTION = "These can be converted with `resolve_each:`. Dataloader was not detected in these resolver methods."
+    self.color = :GREEN
 
     def add_future(field_definition, new_source)
       inject_resolve_keyword(new_source, field_definition, :resolve_each)

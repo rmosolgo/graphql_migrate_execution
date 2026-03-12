@@ -11,7 +11,7 @@ describe "DataloaderShorthand migration strategy" do
   it "turns single dataloader .load calls to field configs" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation
     class Thing < Types::BaseObject
-      field :user_points, Int
+      field :user_points, Int, null: false
 
       def user_points
         context.dataloader.with(Sources::UserPoints).load(object)
@@ -22,7 +22,7 @@ describe "DataloaderShorthand migration strategy" do
 
     expected_result = <<-RUBY
     class Thing < Types::BaseObject
-      field :user_points, Int, dataload: Sources::UserPoints
+      field :user_points, Int, null: false, dataload: Sources::UserPoints
 
       def user_points
         context.dataloader.with(Sources::UserPoints).load(object)
@@ -36,7 +36,7 @@ describe "DataloaderShorthand migration strategy" do
 
     assert_equal remove_legacy(expected_result), <<-RUBY
     class Thing < Types::BaseObject
-      field :user_points, Int, dataload: Sources::UserPoints
+      field :user_points, Int, null: false, dataload: Sources::UserPoints
     end
     RUBY
   end

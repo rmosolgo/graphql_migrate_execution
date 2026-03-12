@@ -5,10 +5,31 @@ require "optparse"
 
 options = {}
 parser = OptionParser.new
-parser.on("--skip-description", "Don't print migration strategy descriptions")
+parser.banner = <<~TEXT
+  Usage: graphql_migrate_execution glob [options]
+
+  A development tool for adopting GraphQL-Ruby's new runtime module, GraphQL::Execution::Next
+
+  Inspect the files matched by `glob` and ...
+
+  - (default) print an analysis result for what can be updated
+  - `--migrate`: update files with new configuration
+  - `--cleanup`: remove legacy configuration and instance methods
+
+TEXT
+
+parser.on("--migrate", "Update the files with future-compatibile configuration")
+parser.on("--cleanup", "Remove resolver instance methods for GraphQL-Ruby's old runtime")
+parser.on("--concise", "Don't print migration strategy descriptions")
+
+# TODO:
+parser.on("--implicit MODE", "Handle implicit field resolution using MODE")
+parser.on("--only PATTERN", "Only analyze or update fields whose path (`Type.field`) matches /PATTERN/")
+
 parser.parse!(into: options)
+
 filename = ARGV.shift || begin
-  warn "graphql-migrate-execution requires a filename or path as a first argument, please pass one."
+  warn "graphql_migrate_execution requires a filename or path as a first argument, please pass one."
   exit 1
 end
 

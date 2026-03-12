@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
-
   class ResolverMethod
     def initialize(name, node)
       @name = name

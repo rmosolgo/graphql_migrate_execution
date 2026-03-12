@@ -7,7 +7,7 @@ module GraphqlMigrateExecution
       message = "Found #{@total_field_definitions} field definitions:".dup
 
       @field_definitions_by_strategy.each do |strategy_class, definitions|
-        message << "\n\n#{color(strategy_class.name.split("::").last, :BOLD)} (#{definitions.size}):"
+        message << "\n\n#{color("#{color(strategy_class.name.split("::").last, strategy_class.color)} (#{definitions.size})", :BOLD)}:\n"
         if !@migration.skip_description
           message << "\n#{strategy_class::DESCRIPTION.split("\n").map { |l| l.length > 0 ? "  #{l}" : l }.join("\n")}\n"
         end
@@ -24,7 +24,7 @@ module GraphqlMigrateExecution
     private
 
     def color(str, color_or_colors)
-      IRB::Color.colorize(str, Array(color_or_colors), colorable: @migration.colorable?)
+      IRB::Color.colorize(str, Array(color_or_colors), colorable: @migration.colorable)
     end
   end
 end
