@@ -19,6 +19,7 @@ GEM
       prism (~> 1.5)
     minitest-focus (1.4.1)
       minitest (> 5.0)
+    ostruct (0.6.3)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -44,7 +45,8 @@ DEPENDENCIES
   graphql_migrate_execution!
   minitest
   minitest-focus
+  ostruct
   rake
 
 BUNDLED WITH
-   2.6.8
+  4.0.8

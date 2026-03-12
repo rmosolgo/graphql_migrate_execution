@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{lib, bin}/**/*", "MIT-LICENSE", "readme.md"]
 
   s.add_runtime_dependency "irb"
+  s.add_development_dependency "ostruct"
   s.add_development_dependency "rake"
   s.add_development_dependency "minitest"
   s.add_development_dependency "minitest-focus"
