@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
     "mailing_list_uri"  => "https://buttondown.email/graphql-ruby",
     "rubygems_mfa_required" => "true",
   }
+  s.executables << "graphql_migrate_execution"
 
   s.files = Dir["{lib, bin}/**/*", "MIT-LICENSE", "readme.md"]
 
