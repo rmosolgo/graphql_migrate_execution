@@ -43,7 +43,8 @@ describe "DataloaderShorthand migration strategy" do
 
   it "turns dataload to config when global source args" do
     expected_result = <<~RUBY
-    class Thing < BaseObject
+    module Thing
+      include Types::BaseInterface
       field :user_points, Int, dataload: { with: Sources::UserPoints, by: [SomeConst, 1, false, nil, :stuff, A::B] }
 
       def user_points(mode:)
@@ -53,7 +54,8 @@ describe "DataloaderShorthand migration strategy" do
     RUBY
 
     assert_equal expected_result, add_future(<<~RUBY)
-    class Thing < BaseObject
+    module Thing
+      include Types::BaseInterface
       field :user_points, Int
 
       def user_points(mode:)
@@ -63,7 +65,8 @@ describe "DataloaderShorthand migration strategy" do
     RUBY
 
     assert_equal remove_legacy(expected_result), <<~RUBY
-    class Thing < BaseObject
+    module Thing
+      include Types::BaseInterface
       field :user_points, Int, dataload: { with: Sources::UserPoints, by: [SomeConst, 1, false, nil, :stuff, A::B] }
     end
     RUBY
