@@ -1,4 +1,5 @@
 require "minitest/test_task"
+require 'bundler/gem_tasks'
 
 Minitest::TestTask.create(:test) do |t|
   t.libs << "test"
