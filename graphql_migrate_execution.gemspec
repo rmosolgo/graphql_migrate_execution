@@ -16,9 +16,9 @@ Gem::Specification.new do |s|
   s.required_ruby_version = ">= 2.7.0"
   s.metadata    = {
     "homepage_uri" => "https://graphql-ruby.org",
-    "changelog_uri" => "https://github.com/rmosolgo/graphql-ruby/blob/master/CHANGELOG.md",
-    "source_code_uri" => "https://github.com/rmosolgo/graphql-ruby",
-    "bug_tracker_uri" => "https://github.com/rmosolgo/graphql-ruby/issues",
+    "changelog_uri" => "https://github.com/rmosolgo/graphql_migrate_execution",
+    "source_code_uri" => "https://github.com/rmosolgo/graphql_migrate_execution",
+    "bug_tracker_uri" => "https://github.com/rmosolgo/graphql_migrate_execution/issues",
     "mailing_list_uri"  => "https://buttondown.email/graphql-ruby",
     "rubygems_mfa_required" => "true",
   }
