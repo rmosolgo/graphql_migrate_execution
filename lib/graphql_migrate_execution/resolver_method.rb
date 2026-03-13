@@ -78,7 +78,8 @@ module GraphqlMigrateExecution
           input_is_object = @load_arg_node.is_a?(Prism::CallNode) && @load_arg_node.name == :object
           # Guess whether these args are free of runtime context:
           shortcutable_source_args = @source_arg_nodes && (@source_arg_nodes.empty? || (@source_arg_nodes.all? { |a| Visitor.constant_node?(a) }))
-          if @source_class_node.is_a?(Prism::ConstantPathNode) && shortcutable_source_args && input_is_object
+          source_ref_is_constant = @source_class_node.is_a?(Prism::ConstantPathNode) || @source_class_node.is_a?(Prism::ConstantReadNode)
+          if source_ref_is_constant && shortcutable_source_args && input_is_object
             DataloaderShorthand
           else
             case call_node.name

@@ -9,11 +9,7 @@ module Types
       dataload_association(:one)
     end
 
-    field :dataload_object_1, Types::Thing, resolve_batch: true
-
-    def self.dataload_object_1(objects, context)
-      context.dataload_all(MySource, :two, objects)
-    end
+    field :dataload_object_1, Types::Thing, dataload: { with: MySource, by: [:two] }
 
     def dataload_object_1
       context.dataloader.with(MySource, :two).load(object)
