@@ -16,6 +16,8 @@ parser.banner = <<~TEXT
   - `--migrate`: update files with new configuration
   - `--cleanup`: remove legacy configuration and instance methods
 
+  Options:
+
 TEXT
 
 parser.on("--migrate", "Update the files with future-compatibile configuration")

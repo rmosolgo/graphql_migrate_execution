@@ -38,7 +38,7 @@ module GraphqlMigrateExecution
       when :type_instance_method
         resolver_method.migration_strategy
       when :resolver
-        NotImplemented
+        DoNothing
       else
         raise "No migration strategy for resolve_mode #{@resolve_mode.inspect}"
       end

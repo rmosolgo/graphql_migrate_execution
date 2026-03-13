@@ -21,7 +21,7 @@ module GraphqlMigrateExecution
     def inject_field_keyword(new_source, field_definition, keyword, value)
       field_definition_source = field_definition.source
       new_definition_source = if field_definition_source[/ [a-z_]+:/] # Does it already have keywords?
-        field_definition_source.sub(/(field.*)( do| {)?$/, "\\1, #{keyword}: #{value}\\2")
+        field_definition_source.sub(/(field.+?)((?: do)|(?: {)|$)/, "\\1, #{keyword}: #{value}\\2")
       else
         field_definition_source + ", #{keyword}: #{value}"
       end
@@ -31,7 +31,7 @@ module GraphqlMigrateExecution
 
     def remove_field_keyword(new_source, field_definition, keyword)
       field_definition_source = field_definition.source
-      new_definition_source = field_definition_source.sub(/, #{keyword}: \S+( |$)/, "\\1")
+      new_definition_source = field_definition_source.sub(/, #{keyword}: \S+(,|$)/, "\\1")
       new_source.sub!(field_definition_source, new_definition_source)
     end
 

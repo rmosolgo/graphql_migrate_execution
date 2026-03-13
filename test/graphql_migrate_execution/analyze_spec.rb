@@ -11,6 +11,7 @@ describe "Analyze Action" do
 Found 9 field definitions:
 
 Implicit (1):
+
   These fields use GraphQL-Ruby's default, implicit resolution behavior. It's changing in the future, please audit these fields and choose a migration strategy:
 
     - `--preserve-implicit`: Don't add any new configuration; use GraphQL-Ruby's future direct method send behavior (ie `object.public_send(field_name, **arguments)`)
@@ -18,29 +19,28 @@ Implicit (1):
 
   - Product.title   (nil -> nil) @ test/graphql_migrate_execution/fixtures/product.rb:4
 
-DoNothing (3):
+DoNothing (4):
+
   These field definitions are already future-compatible. No migration is required.
 
-  - Product.description   (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.rb:5
-  - Product.brand         (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.rb:20
-  - Product.diggable      (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.rb:34
+  - Product.description      (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.rb:5
+  - Product.brand            (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.rb:20
+  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.rb:34
+  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.rb:35
 
 ResolveEach (2):
+
   These can be converted with `resolve_each:`. Dataloader was not detected in these resolver methods.
 
   - Product.price_in_cents      (:type_instance_method -> :price) @ test/graphql_migrate_execution/fixtures/product.rb:6
   - Product.viewer_can_afford   (:type_instance_method -> :viewer_can_afford) @ test/graphql_migrate_execution/fixtures/product.rb:14
 
 ResolveStatic (2):
+
   These can be converted with `resolve_static:`. Dataloader was not detected in these resolver methods.
 
   - Product.trending   (:type_instance_method -> :trending) @ test/graphql_migrate_execution/fixtures/product.rb:22
   - Product.on_sale    (:type_instance_method -> :is_on_sale) @ test/graphql_migrate_execution/fixtures/product.rb:28
-
-NotImplemented (1):
-  GraphQL-Ruby doesn't have a migration strategy for these fields. Automated migration may be possible -- please open an issue on GitHub with the source for these fields to investigate.
-
-  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.rb:35
     TXT
     assert_equal expected_msg, message
   end
@@ -56,11 +56,12 @@ Implicit (1):
 
   - Product.title   (nil -> nil) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:4
 
-DoNothing (3):
+DoNothing (4):
 
-  - Product.description   (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:5
-  - Product.brand         (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.migrated.rb:28
-  - Product.diggable      (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:50
+  - Product.description      (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:5
+  - Product.brand            (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.migrated.rb:28
+  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:50
+  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.migrated.rb:51
 
 ResolveEach (2):
 
@@ -71,10 +72,6 @@ ResolveStatic (2):
 
   - Product.trending   (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:30
   - Product.on_sale    (:already_migrated -> {resolve_static: :is_on_sale}) @ test/graphql_migrate_execution/fixtures/product.migrated.rb:40
-
-NotImplemented (1):
-
-  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.migrated.rb:51
     TXT
     assert_equal expected_msg, message
   end
@@ -90,11 +87,12 @@ Implicit (1):
 
   - Product.title   (nil -> nil) @ test/graphql_migrate_execution/fixtures/product.future.rb:4
 
-DoNothing (3):
+DoNothing (4):
 
-  - Product.description   (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.future.rb:5
-  - Product.brand         (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.future.rb:20
-  - Product.diggable      (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.future.rb:34
+  - Product.description      (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.future.rb:5
+  - Product.brand            (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.future.rb:20
+  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.future.rb:34
+  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.future.rb:35
 
 ResolveEach (2):
 
@@ -105,10 +103,6 @@ ResolveStatic (2):
 
   - Product.trending   (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.future.rb:22
   - Product.on_sale    (:already_migrated -> {resolve_static: :is_on_sale}) @ test/graphql_migrate_execution/fixtures/product.future.rb:28
-
-NotImplemented (1):
-
-  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.future.rb:35
     TXT
     assert_equal(expected_msg, message)
   end
@@ -127,26 +121,26 @@ DataloaderShorthand (1):
 
   - Something.dataload_assoc   (:type_instance_method -> :dataload_assoc) @ test/graphql_migrate_execution/fixtures/dataload.rb:6
 
-DataloaderAll (2):
+NotImplemented (2):
 
-  These fields can be migrated to a `.load_all` call.
+  GraphQL-Ruby doesn't have a migration strategy for these fields. Automated migration may be possible -- please open an issue on GitHub with the source for these fields to investigate.
 
-  - Something.dataload_object_1   (:type_instance_method -> :dataload_object_1) @ test/graphql_migrate_execution/fixtures/dataload.rb:12
-  - Something.dataload_object_2   (:type_instance_method -> :dataload_object_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:18
+  - Something.dataload_object_1   (:already_migrated -> {resolve_batch: true}) @ test/graphql_migrate_execution/fixtures/dataload.rb:12
+  - Something.dataload_object_2   (:already_migrated -> {resolve_batch: true}) @ test/graphql_migrate_execution/fixtures/dataload.rb:22
 
 DataloaderBatch (2):
 
   These fields can be rewritten to dataload in a `resolve_batch:` method.
 
-  - Something.dataload_rec     (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:24
-  - Something.dataload_rec_2   (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:30
+  - Something.dataload_rec     (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:32
+  - Something.dataload_rec_2   (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:38
 
 DataloaderManual (1):
 
   These fields use Dataloader in a way that can't be automatically migrated. You'll have to migrate them manually.
   If you have a lot of these, consider opening up an issue on GraphQL-Ruby -- maybe we can find a way to programmatically support them.
 
-  - Something.dataload_complicated   (:type_instance_method -> :dataload_complicated) @ test/graphql_migrate_execution/fixtures/dataload.rb:36
+  - Something.dataload_complicated   (:type_instance_method -> :dataload_complicated) @ test/graphql_migrate_execution/fixtures/dataload.rb:44
     TXT
     assert_equal(expected_msg, message)
   end

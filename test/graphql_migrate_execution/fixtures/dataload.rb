@@ -3,7 +3,7 @@ module Types
   module Something
     include Types::BaseInterface
 
-    field :dataload_assoc, Types::Thing, dataload: { association: :one }
+    field :dataload_assoc, Types::Thing
 
     def dataload_assoc
       dataload_association(:one)

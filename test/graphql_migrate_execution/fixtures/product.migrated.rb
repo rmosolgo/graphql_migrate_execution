@@ -3,7 +3,7 @@ module Types
   class Product < Types::BaseObject
     field :title, String
     field :description, String, method: :long_description
-    field :price_in_cents, Integer, resolve_each: :price, resolver_method: :price do
+    field :price_in_cents, Integer, resolver_method: :price, resolve_each: :price do
       argument :coupon_code, String
     end
 
@@ -37,7 +37,7 @@ module Types
       self.class.trending(context)
     end
 
-    field :on_sale, Boolean, resolve_static: :is_on_sale, resolver_method: :is_on_sale
+    field :on_sale, Boolean, resolver_method: :is_on_sale, resolve_static: :is_on_sale
 
     def self.is_on_sale(context)
       true
