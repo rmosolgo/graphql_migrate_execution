@@ -121,26 +121,26 @@ DataloaderShorthand (1):
 
   - Something.dataload_assoc   (:type_instance_method -> :dataload_assoc) @ test/graphql_migrate_execution/fixtures/dataload.rb:6
 
-NotImplemented (2):
+DataloaderAll (2):
 
-  GraphQL-Ruby doesn't have a migration strategy for these fields. Automated migration may be possible -- please open an issue on GitHub with the source for these fields to investigate.
+  These fields can be migrated to a `.load_all` call.
 
-  - Something.dataload_object_1   (:already_migrated -> {resolve_batch: true}) @ test/graphql_migrate_execution/fixtures/dataload.rb:12
-  - Something.dataload_object_2   (:already_migrated -> {resolve_batch: true}) @ test/graphql_migrate_execution/fixtures/dataload.rb:22
+  - Something.dataload_object_1   (:type_instance_method -> :dataload_object_1) @ test/graphql_migrate_execution/fixtures/dataload.rb:12
+  - Something.dataload_object_2   (:type_instance_method -> :dataload_object_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:18
 
 DataloaderBatch (2):
 
   These fields can be rewritten to dataload in a `resolve_batch:` method.
 
-  - Something.dataload_rec     (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:32
-  - Something.dataload_rec_2   (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:38
+  - Something.dataload_rec     (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:24
+  - Something.dataload_rec_2   (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:30
 
 DataloaderManual (1):
 
   These fields use Dataloader in a way that can't be automatically migrated. You'll have to migrate them manually.
   If you have a lot of these, consider opening up an issue on GraphQL-Ruby -- maybe we can find a way to programmatically support them.
 
-  - Something.dataload_complicated   (:type_instance_method -> :dataload_complicated) @ test/graphql_migrate_execution/fixtures/dataload.rb:44
+  - Something.dataload_complicated   (:type_instance_method -> :dataload_complicated) @ test/graphql_migrate_execution/fixtures/dataload.rb:36
     TXT
     assert_equal(expected_msg, message)
   end
