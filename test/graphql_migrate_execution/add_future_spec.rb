@@ -13,6 +13,7 @@ describe "AddFuture Action" do
     path = "test/graphql_migrate_execution/fixtures/dataload.rb"
     source = File.read(path)
     new_source = GraphqlMigrateExecution::AddFuture.new(nil, path, source).run
-    assert_equal File.read("test/graphql_migrate_execution/fixtures/dataload.migrated.rb"), new_source
+    expected_path = "test/graphql_migrate_execution/fixtures/dataload.migrated.rb"
+    assert_equal File.read(expected_path), new_source, "Output for #{path} matches #{expected_path}"
   end
 end

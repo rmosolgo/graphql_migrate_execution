@@ -25,13 +25,13 @@ module Types
       dataload(Sources::Nested::MySource, object.id)
     end
 
-    field :dataload_rec, Types::Thing
+    field :dataload_rec, Types::Thing, dataload: { model: Something, using: :something_id }
 
     def dataload_rec
       dataload_record(Something, object.something_id)
     end
 
-    field :dataload_rec_2, Types::Thing
+    field :dataload_rec_2, Types::Thing, dataload: { model: Something, using: :something_name, find_by: :name }
 
     def dataload_rec_2
       dataload_record(Something, object.something_name, find_by: :name)

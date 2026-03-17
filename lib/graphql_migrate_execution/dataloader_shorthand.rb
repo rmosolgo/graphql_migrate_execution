@@ -10,6 +10,15 @@ module GraphqlMigrateExecution
       rm = field_definition.resolver_method
       if (da = rm.dataload_association)
         dataload_config = "{ association: #{da.inspect} }"
+      elsif (dr = rm.dataload_record)
+        dataload_config = "{ model: #{dr}".dup
+        if (dr_using = rm.dataload_record_using)
+          dataload_config << ", using: #{dr_using.inspect}"
+        end
+        if (fb = rm.dataload_record_find_by)
+          dataload_config << ", find_by: #{fb.inspect}"
+        end
+        dataload_config << " }"
       elsif rm.source_arg_nodes.empty?
         dataload_config = rm.source_class_node.full_name
       else

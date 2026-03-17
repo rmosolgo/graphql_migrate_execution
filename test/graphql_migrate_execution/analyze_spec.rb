@@ -115,25 +115,20 @@ ResolveStatic (2):
     expected_msg = <<~TXT.chomp
 Found 6 field definitions:
 
-DataloaderShorthand (2):
+DataloaderShorthand (4):
 
   These fields can use a `dataload: ...` configuration.
 
   - Something.dataload_assoc      (:type_instance_method -> :dataload_assoc) @ test/graphql_migrate_execution/fixtures/dataload.rb:6
   - Something.dataload_object_1   (:type_instance_method -> :dataload_object_1) @ test/graphql_migrate_execution/fixtures/dataload.rb:12
+  - Something.dataload_rec        (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:24
+  - Something.dataload_rec_2      (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:30
 
 DataloaderAll (1):
 
   These fields can be migrated to a `.load_all` call.
 
   - Something.dataload_object_2   (:type_instance_method -> :dataload_object_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:18
-
-DataloaderBatch (2):
-
-  These fields can be rewritten to dataload in a `resolve_batch:` method.
-
-  - Something.dataload_rec     (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:24
-  - Something.dataload_rec_2   (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:30
 
 DataloaderManual (1):
 

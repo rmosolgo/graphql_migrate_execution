@@ -16,11 +16,15 @@ module GraphqlMigrateExecution
       @calls_dataloader = false
       @dataloader_call = false
       @uses_current_path = false
+      @dataload_association = nil
+      @dataload_record = nil
+      @dataload_record_using = nil
+      @dataload_record_find_by = nil
     end
 
     attr_reader :name, :node, :parameter_names, :self_sends
 
-    attr_reader :source_class_node, :source_arg_nodes, :load_arg_node, :dataload_association
+    attr_reader :source_class_node, :source_arg_nodes, :load_arg_node, :dataload_association, :dataload_record, :dataload_record_using, :dataload_record_find_by
 
     attr_accessor :calls_object, :calls_context, :calls_class, :calls_dataloader, :uses_current_path
 
@@ -68,6 +72,22 @@ module GraphqlMigrateExecution
               assoc_sym = assoc_arg.unescaped.to_sym
               @dataload_association = assoc_sym == name ? true : assoc_sym
             end
+          when :dataload_record
+            if (record_args = call_node.arguments.arguments) &&
+                (record_arg = record_args.first) &&
+                (record_arg.is_a?(Prism::ConstantReadNode) || record_arg.is_a?(Prism::ConstantPathNode)) &&
+                (using_arg = record_args[1]) &&
+                # Must be `object.{something}`
+                (using_arg.is_a?(Prism::CallNode)) &&
+                (using_arg.receiver.is_a?(Prism::CallNode) && using_arg.receiver.name == :object)
+              @dataload_record = record_arg.full_name
+              @dataload_record_using = using_arg.name
+
+              if (kwargs = record_args.last).is_a?(Prism::KeywordHashNode) && (find_by_kwarg = kwargs.elements.find { |el| el.key.is_a?(Prism::SymbolNode) && el.key.unescaped == "find_by" })
+                find_by_node = find_by_kwarg.value
+                @dataload_record_find_by = find_by_node.unescaped.to_sym # Assumes a SymbolNode
+              end
+            end
           else
             if (source_call = call_node.receiver) # eg dataloader.with(...).load(...)
               @source_class_node = source_call.arguments.arguments.first
@@ -86,9 +106,9 @@ module GraphqlMigrateExecution
             case call_node.name
             when :load, :request, :dataload
               DataloaderAll
-            when :load_all, :request_all, :dataload_record
+            when :load_all, :request_all
               DataloaderBatch
-            when :dataload_association
+            when :dataload_association, :dataload_record
               DataloaderShorthand
             else
               DataloaderManual
