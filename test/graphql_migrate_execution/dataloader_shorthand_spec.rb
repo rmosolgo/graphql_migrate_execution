@@ -4,9 +4,6 @@ require_relative "./strategy_helpers"
 
 describe "DataloaderShorthand migration strategy" do
   include GraphQLMigrateExecutionStrategyHelpers
-  before do
-    @strategy_class = GraphqlMigrateExecution::DataloaderShorthand
-  end
 
   it "turns single dataloader .load calls to field configs" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation

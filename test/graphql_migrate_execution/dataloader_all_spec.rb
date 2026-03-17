@@ -4,9 +4,6 @@ require_relative "./strategy_helpers"
 
 describe "DataloaderAll migration strategy" do
   include GraphQLMigrateExecutionStrategyHelpers
-  before do
-    @strategy_class = GraphqlMigrateExecution::DataloaderAll
-  end
 
   it "turns single dataloader .load calls to list calls" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation
@@ -14,7 +11,7 @@ describe "DataloaderAll migration strategy" do
       field :user_points, Int
 
       def user_points
-        context.dataloader.with(Sources::UserPoints).load(object)
+        context.dataloader.with(Sources::UserPoints).load(object.thing.stuff)
       end
     end
     RUBY
@@ -25,11 +22,11 @@ describe "DataloaderAll migration strategy" do
       field :user_points, Int, resolve_batch: true
 
       def self.user_points(objects, context)
-        context.dataload_all(Sources::UserPoints, objects)
+        context.dataload_all(Sources::UserPoints, objects.map { |obj| obj.thing.stuff })
       end
 
       def user_points
-        context.dataloader.with(Sources::UserPoints).load(object)
+        context.dataloader.with(Sources::UserPoints).load(object.thing.stuff)
       end
     end
     RUBY

@@ -1,26 +1,23 @@
-require "ostruct"
+
 module GraphQLMigrateExecutionStrategyHelpers
   def add_future(ruby_src)
-    apply_action_method(ruby_src, :add_future)
+    apply_action_method(ruby_src, GraphqlMigrateExecution::AddFuture)
   end
 
   def remove_legacy(ruby_src)
-    apply_action_method(ruby_src, :remove_legacy)
+    apply_action_method(ruby_src, GraphqlMigrateExecution::RemoveLegacy)
   end
 
   def analyze(ruby_src)
     action = GraphqlMigrateExecution::Analyze.new(OpenStruct.new(colorable: false), "app.rb", ruby_src)
     action.run
+    action.message
   end
 
-  def apply_action_method(ruby_src, action_method)
-    action = GraphqlMigrateExecution::Action.new(nil, "app.rb", ruby_src)
+  def apply_action_method(ruby_src, action_class)
+    migration = OpenStruct.new(colorable: false, dry_run: true)
+    action = action_class.new(migration, "app.rb", ruby_src)
     action.run
-    new_source = ruby_src.dup
-    type_defn = action.type_definitions.each_value.find { |td| td.field_definitions.any? }
-    type_defn.field_definitions.each_value do |field_definition|
-      @strategy_class.new.public_send(action_method, field_definition, new_source)
-    end
-    new_source
+    action.result_source
   end
 end

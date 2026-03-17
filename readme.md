@@ -28,6 +28,7 @@ Options:
         --migrate                    Update the files with future-compatibile configuration
         --cleanup                    Remove resolver instance methods for GraphQL-Ruby's old runtime
         --concise                    Don't print migration strategy descriptions
+        --dry-run                    Don't actually modify files
         --implicit MODE              Handle implicit field resolution using MODE
         --only PATTERN               Only analyze or update fields whose path (`Type.field`) matches /PATTERN/
 ```

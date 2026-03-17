@@ -41,7 +41,7 @@ module GraphqlMigrateExecution
         when :resolve_static
           ResolveStatic
         when :resolve_batch
-          NotImplemented
+          ResolveBatch
         else
           raise ArgumentError, "Unexpected already_migrated: #{@already_migrated.inspect}"
         end

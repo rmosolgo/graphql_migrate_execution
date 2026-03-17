@@ -23,6 +23,7 @@ TEXT
 parser.on("--migrate", "Update the files with future-compatibile configuration")
 parser.on("--cleanup", "Remove resolver instance methods for GraphQL-Ruby's old runtime")
 parser.on("--concise", "Don't print migration strategy descriptions")
+parser.on("--dry-run", "Don't actually modify files")
 
 # TODO:
 parser.on("--implicit MODE", "Handle implicit field resolution using MODE")
@@ -34,6 +35,8 @@ filename = ARGV.shift || begin
   warn "graphql_migrate_execution requires a filename or path as a first argument, please pass one."
   exit 1
 end
+
+options[:dry_run] = options.delete(:"dry-run")
 
 migration = GraphqlMigrateExecution::Migration.new(filename, **options)
 migration.run

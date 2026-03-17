@@ -4,9 +4,6 @@ require_relative "./strategy_helpers"
 
 describe "UnsupportedExtra migration strategy" do
   include GraphQLMigrateExecutionStrategyHelpers
-  before do
-    @strategy_class = GraphqlMigrateExecution::UnsupportedExtra
-  end
 
   it "Identifies unsupported extras" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation

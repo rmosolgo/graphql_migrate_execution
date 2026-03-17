@@ -122,6 +122,7 @@ module GraphqlMigrateExecution
           ResolveStatic
         end
       else
+        p [calls_to_self]
         NotImplemented
       end
     end

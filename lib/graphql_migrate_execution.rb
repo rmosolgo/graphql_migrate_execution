@@ -10,6 +10,7 @@ require "graphql_migrate_execution/visitor"
 require "graphql_migrate_execution/strategy"
 require "graphql_migrate_execution/implicit"
 require "graphql_migrate_execution/do_nothing"
+require "graphql_migrate_execution/resolve_batch"
 require "graphql_migrate_execution/resolve_each"
 require "graphql_migrate_execution/resolve_static"
 require "graphql_migrate_execution/not_implemented"
@@ -25,9 +26,10 @@ require "irb"
 
 module GraphqlMigrateExecution
   class Migration
-    def initialize(glob, concise: false, migrate: false, cleanup: false, only: nil, implicit: nil, colorable: IRB::Color.colorable?)
+    def initialize(glob, dry_run: false, concise: false, migrate: false, cleanup: false, only: nil, implicit: nil, colorable: IRB::Color.colorable?)
       @glob = glob
       @skip_description = concise
+      @dry_run = dry_run
       @colorable = colorable
       @only = only
       @implicit = implicit
@@ -46,8 +48,12 @@ module GraphqlMigrateExecution
     def run
       Dir.glob(@glob).each do |filepath|
         source = File.read(filepath)
-        file_migrate = @action_class.new(self, filepath, source)
-        puts file_migrate.run
+        action = @action_class.new(self, filepath, source)
+        action.run
+        if !@dry_run
+          File.write(filepath, action.result_source)
+        end
+        puts action.message
       end
     end
   end

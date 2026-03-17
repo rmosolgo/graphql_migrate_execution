@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 require "test_helper"
-require "ostruct"
 
 describe "Analyze Action" do
   it "produces an analysis message" do
     path = "test/graphql_migrate_execution/fixtures/product.rb"
     source = File.read(path)
-    message = GraphqlMigrateExecution::Analyze.new(OpenStruct.new, path, source).run
+    action = GraphqlMigrateExecution::Analyze.new(OpenStruct.new, path, source)
+    action.run
+    message = action.message
     expected_msg = <<~TXT.chomp
 Found 9 field definitions:
 
@@ -48,7 +49,9 @@ ResolveStatic (2):
   it "produces an analysis message on migrated files" do
     path = "test/graphql_migrate_execution/fixtures/product.migrated.rb"
     source = File.read(path)
-    message = GraphqlMigrateExecution::Analyze.new(OpenStruct.new(skip_description: true), path, source).run
+    action = GraphqlMigrateExecution::Analyze.new(OpenStruct.new(skip_description: true), path, source)
+    action.run
+    message = action.message
     expected_msg = <<~TXT.chomp
 Found 9 field definitions:
 
@@ -79,7 +82,9 @@ ResolveStatic (2):
   it "produces an analysis message on future files" do
     path = "test/graphql_migrate_execution/fixtures/product.future.rb"
     source = File.read(path)
-    message = GraphqlMigrateExecution::Analyze.new(OpenStruct.new(skip_description: true), path, source).run
+    action = GraphqlMigrateExecution::Analyze.new(OpenStruct.new(skip_description: true), path, source)
+    action.run
+    message = action.message
     expected_msg = <<~TXT.chomp
 Found 9 field definitions:
 
@@ -111,7 +116,9 @@ ResolveStatic (2):
   it "analyzes dataloader usage" do
     path = "test/graphql_migrate_execution/fixtures/dataload.rb"
     source = File.read(path)
-    message = GraphqlMigrateExecution::Analyze.new(OpenStruct.new, path, source).run
+    action = GraphqlMigrateExecution::Analyze.new(OpenStruct.new, path, source)
+    action.run
+    message = action.message
     expected_msg = <<~TXT.chomp
 Found 8 field definitions:
 

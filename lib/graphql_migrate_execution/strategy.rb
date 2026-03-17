@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
   class Strategy
+    def self.strategy_name
+      name.split("::").last
+    end
+
     def add_future(field_definition, new_source)
     end
 

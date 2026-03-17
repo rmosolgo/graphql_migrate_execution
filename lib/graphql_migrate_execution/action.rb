@@ -8,9 +8,11 @@ module GraphqlMigrateExecution
       @type_definitions = Hash.new { |h, k| h[k] = TypeDefinition.new(k) }
       @field_definitions_by_strategy = Hash.new { |h, k| h[k] = [] }
       @total_field_definitions = 0
+      @message = "".dup
+      @result_source = @source.dup
     end
 
-    attr_reader :type_definitions
+    attr_reader :type_definitions, :message, :result_source
 
     def run
       parse_result = Prism.parse(@source, filepath: @path)
@@ -29,14 +31,26 @@ module GraphqlMigrateExecution
     private
 
     def call_method_on_strategy(method_name)
-      new_source = @source.dup
+      indent_size = @field_definitions_by_strategy.each_key.map { |sc| sc.strategy_name.length }.max + 1
+      indent = " " * indent_size
+      indent2_size = @field_definitions_by_strategy.each_value.flat_map { |fdefns| fdefns.map { |fd| fd.path.size } }.max
       @field_definitions_by_strategy.each do |strategy_class, field_definitions|
         strategy = strategy_class.new
+        @message << "\n#{color(strategy_class.strategy_name.ljust(indent_size), [:BOLD, strategy_class.color])}"
+        first = true
         field_definitions.each do |field_defn|
-          strategy.public_send(method_name, field_defn, new_source)
+          @message << "#{first ? "" : "#{indent}"}#{field_defn.path.ljust(indent2_size)}  @ #{@path}:#{field_defn.source_line}\n"
+          first = false
+          strategy.public_send(method_name, field_defn, @result_source)
         end
       end
-      new_source
+    end
+
+
+    private
+
+    def color(str, color_or_colors)
+      IRB::Color.colorize(str, Array(color_or_colors), colorable: @migration.colorable)
     end
   end
 end

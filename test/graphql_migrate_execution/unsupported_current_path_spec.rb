@@ -4,9 +4,7 @@ require_relative "./strategy_helpers"
 
 describe "UnsupportedCurrentPath migration strategy" do
   include GraphQLMigrateExecutionStrategyHelpers
-  before do
-    @strategy_class = GraphqlMigrateExecution::UnsupportedCurrentPath
-  end
+
  it "Reports Hash-style current_path usage" do
     input = <<~RUBY
     class Thing < Types::BaseObject

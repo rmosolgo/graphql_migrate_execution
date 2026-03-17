@@ -4,9 +4,6 @@ require_relative "./strategy_helpers"
 
 describe "HashKey migration strategy" do
   include GraphQLMigrateExecutionStrategyHelpers
-  before do
-    @strategy_class = GraphqlMigrateExecution::HashKey
-  end
 
   it "Identifies resolvers which should use symbol hash keys" do
     input = <<~RUBY
