@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 require "test_helper"
-require_relative "./strategy_helpers"
 
 describe "UnsupportedCurrentPath migration strategy" do
-  include GraphQLMigrateExecutionStrategyHelpers
+  include MigrationHelpers
 
  it "Reports Hash-style current_path usage" do
     input = <<~RUBY
@@ -17,12 +16,10 @@ describe "UnsupportedCurrentPath migration strategy" do
     RUBY
 
 
-    expected_result = <<~TEXT.chomp
+    expected_result = <<~TEXT
 Found 1 field definition:
 
 UnsupportedCurrentPath (1):
-
-  These use `context[:current_path]` or `context.current_path` which isn't supported. Refactor these fields then try migrating again. (Open an issue on GraphQL-Ruby's GitHub repo to discuss further.)
 
   - Thing.user_points   (:type_instance_method -> :user_points) @ app.rb:2
     TEXT
@@ -42,12 +39,10 @@ UnsupportedCurrentPath (1):
     RUBY
 
 
-    expected_result = <<~TEXT.chomp
+    expected_result = <<~TEXT
 Found 1 field definition:
 
 UnsupportedCurrentPath (1):
-
-  These use `context[:current_path]` or `context.current_path` which isn't supported. Refactor these fields then try migrating again. (Open an issue on GraphQL-Ruby's GitHub repo to discuss further.)
 
   - Thing.user_points   (:type_instance_method -> :user_points) @ app.rb:2
     TEXT

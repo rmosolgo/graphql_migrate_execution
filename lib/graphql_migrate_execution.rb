@@ -1,8 +1,7 @@
 # frozen_string_literal: true
+require "prism"
 require "graphql_migrate_execution/action"
-require "graphql_migrate_execution/add_future"
-require "graphql_migrate_execution/remove_legacy"
-require "graphql_migrate_execution/analyze"
+require "graphql_migrate_execution/migration"
 require "graphql_migrate_execution/field_definition"
 require "graphql_migrate_execution/resolver_method"
 require "graphql_migrate_execution/type_definition"
@@ -25,36 +24,4 @@ require "graphql_migrate_execution/not_implemented"
 require "irb"
 
 module GraphqlMigrateExecution
-  class Migration
-    def initialize(glob, dry_run: false, concise: false, migrate: false, cleanup: false, only: nil, implicit: nil, colorable: IRB::Color.colorable?)
-      @glob = glob
-      @skip_description = concise
-      @dry_run = dry_run
-      @colorable = colorable
-      @only = only
-      @implicit = implicit
-      @action_class = if migrate
-        AddFuture
-      elsif cleanup
-        RemoveLegacy
-      else
-        Analyze
-      end
-    end
-
-    attr_reader :skip_description, :colorable
-
-
-    def run
-      Dir.glob(@glob).each do |filepath|
-        source = File.read(filepath)
-        action = @action_class.new(self, filepath, source)
-        action.run
-        if !@dry_run
-          File.write(filepath, action.result_source)
-        end
-        puts action.message
-      end
-    end
-  end
 end

@@ -6,18 +6,18 @@ module GraphqlMigrateExecution
     DESC
     self.color = :GREEN
 
-    def add_future(field_definition, new_source)
-      inject_resolve_keyword(new_source, field_definition, :resolve_batch)
-      inject_batch_dataloader_method(field_definition, new_source, [:request, :load], :dataload, "map")
+    def migrate(field_definition)
+      inject_resolve_keyword(field_definition, :resolve_batch)
+      inject_batch_dataloader_method(field_definition, [:request, :load], :dataload, "map")
     end
 
-    def remove_legacy(field_definition, new_source)
-      remove_resolver_method(new_source, field_definition)
+    def cleanup(field_definition)
+      remove_resolver_method(field_definition)
     end
 
     private
 
-    def inject_batch_dataloader_method(field_definition, new_source, longhand_methods, shorthand_method, map_method)
+    def inject_batch_dataloader_method(field_definition, longhand_methods, shorthand_method, map_method)
       def_node = field_definition.resolver_method.node
       call_node = def_node.body.body.first
       case call_node.name
@@ -59,7 +59,7 @@ module GraphqlMigrateExecution
       new_method_source.sub!(call_node.slice, "context.dataload_all(#{new_args})")
 
       combined_new_source = new_method_source + "\n" + old_method_source
-      new_source.sub!(old_method_source, combined_new_source)
+      @result_source.sub!(old_method_source, combined_new_source)
     end
   end
 end

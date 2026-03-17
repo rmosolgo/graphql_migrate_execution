@@ -1,0 +1,22 @@
+Found 9 field definitions:
+
+Implicit (1):
+
+  - Product.title   (nil -> nil) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:4
+
+DoNothing (4):
+
+  - Product.description      (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:5
+  - Product.brand            (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:20
+  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:34
+  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:35
+
+ResolveEach (2):
+
+  - Product.price_in_cents      (:already_migrated -> {resolve_each: :price}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:6
+  - Product.viewer_can_afford   (:already_migrated -> {resolve_each: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:14
+
+ResolveStatic (2):
+
+  - Product.trending   (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:22
+  - Product.on_sale    (:already_migrated -> {resolve_static: :is_on_sale}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:28

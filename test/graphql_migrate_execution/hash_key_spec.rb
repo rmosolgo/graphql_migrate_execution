@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 require "test_helper"
-require_relative "./strategy_helpers"
 
 describe "HashKey migration strategy" do
-  include GraphQLMigrateExecutionStrategyHelpers
+  include MigrationHelpers
 
   it "Identifies resolvers which should use symbol hash keys" do
     input = <<~RUBY
@@ -23,12 +22,10 @@ describe "HashKey migration strategy" do
     RUBY
 
 
-    expected_analyze_result = <<-TEXT.chomp
+    expected_analyze_result = <<-TEXT
 Found 2 field definitions:
 
 HashKey (2):
-
-  These can be future-proofed with `hash_key: ...` configurations
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
@@ -52,7 +49,7 @@ HashKey (2):
     end
     RUBY
 
-    assert_equal expected_migrate_result, add_future(input)
+    assert_equal expected_migrate_result, migrate(input)
   end
 
   it "Identifies resolvers which should use String hash keys" do
@@ -75,12 +72,10 @@ HashKey (2):
     RUBY
 
 
-    expected_analyze_result = <<-TEXT.chomp
+    expected_analyze_result = <<~TEXT
 Found 2 field definitions:
 
 HashKey (2):
-
-  These can be future-proofed with `hash_key: ...` configurations
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
@@ -106,8 +101,8 @@ HashKey (2):
     end
     RUBY
 
-    assert_equal expected_migrate_result, add_future(input)
-    assert_equal expected_migrate_result, add_future(expected_migrate_result), "It doesn't re-add the configuration"
+    assert_equal expected_migrate_result, migrate(input)
+    assert_equal expected_migrate_result, migrate(expected_migrate_result), "It doesn't re-add the configuration"
   end
 
 
@@ -131,15 +126,10 @@ HashKey (2):
     RUBY
 
 
-    expected_analyze_result = <<-TEXT.chomp
+    expected_analyze_result = <<~TEXT
 Found 2 field definitions:
 
 Implicit (2):
-
-  These fields use GraphQL-Ruby's default, implicit resolution behavior. It's changing in the future, please audit these fields and choose a migration strategy:
-
-    - `--preserve-implicit`: Don't add any new configuration; use GraphQL-Ruby's future direct method send behavior (ie `object.public_send(field_name, **arguments)`)
-    - `--shim-implicit`: Add a method to preserve GraphQL-Ruby's previous dynamic implicit behavior (ie, checking for `respond_to?` and `key?`)
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4

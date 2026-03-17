@@ -21,6 +21,7 @@ describe "GraphqlMigrateExecution" do
     File.write("tmp/dataload.rb", starting_content)
     text, _status = Open3.capture2e("bin/graphql_migrate_execution --migrate --dry-run tmp/dataload.rb")
     expected_output = <<~TXT
+Found 8 field definitions:
 
 DataloaderShorthand Something.dataload_assoc        @ tmp/dataload.rb:6
                     Something.dataload_object_1     @ tmp/dataload.rb:12
@@ -40,7 +41,7 @@ DataloaderBatch     Something.dataload_things       @ tmp/dataload.rb:43
 
     text, _status = Open3.capture2e("bin/graphql_migrate_execution --migrate tmp/dataload.rb")
 
-    migrated_content = File.read("test/graphql_migrate_execution/fixtures/dataload.migrated.rb")
+    migrated_content = File.read("test/graphql_migrate_execution/fixtures/dataload.migrate.rb")
     assert_equal migrated_content, File.read("tmp/dataload.rb")
     assert_equal expected_output, text
   end

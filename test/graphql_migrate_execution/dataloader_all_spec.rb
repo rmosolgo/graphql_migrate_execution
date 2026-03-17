@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 require "test_helper"
-require_relative "./strategy_helpers"
 
 describe "DataloaderAll migration strategy" do
-  include GraphQLMigrateExecutionStrategyHelpers
+  include MigrationHelpers
 
   it "turns single dataloader .load calls to list calls" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation
@@ -31,9 +30,9 @@ describe "DataloaderAll migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(input)
+    assert_equal expected_result, migrate(input)
     assert input.end_with?("\n")
-    assert add_future(input).end_with?("\n")
+    assert migrate(input).end_with?("\n")
   end
 
   it "turns dataload calls to list calls, preserving source arguments" do
@@ -51,7 +50,7 @@ describe "DataloaderAll migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     class Thing < BaseObject
       field :user_points, Int
 
@@ -79,7 +78,7 @@ describe "DataloaderAll migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     class Thing < BaseObject
       field :user_points, Integer, resolver_method: :get_user_points do
         argument :mode, String
@@ -107,7 +106,7 @@ describe "DataloaderAll migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     class Thing < BaseObject
       field :user_points, Int
 
@@ -130,7 +129,7 @@ describe "DataloaderAll migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     class Thing < BaseObject
       field :user_points, Int
       def user_points
@@ -155,7 +154,7 @@ describe "DataloaderAll migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     class Thing < BaseObject
       field :user_points, Int
 
@@ -174,6 +173,6 @@ describe "DataloaderAll migration strategy" do
       end
     end
     RUBY
-    assert_equal expected_migrated, remove_legacy(expected_result)
+    assert_equal expected_migrated, cleanup(expected_result)
   end
 end

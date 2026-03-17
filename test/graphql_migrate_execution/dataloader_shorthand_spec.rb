@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 require "test_helper"
-require_relative "./strategy_helpers"
 
 describe "DataloaderShorthand migration strategy" do
-  include GraphQLMigrateExecutionStrategyHelpers
+  include MigrationHelpers
 
   it "turns single dataloader .load calls to field configs" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation
@@ -27,11 +26,11 @@ describe "DataloaderShorthand migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(input)
+    assert_equal expected_result, migrate(input)
     assert input.end_with?("\n")
-    assert add_future(input).end_with?("\n")
+    assert migrate(input).end_with?("\n")
 
-    assert_equal remove_legacy(expected_result), <<-RUBY
+    assert_equal cleanup(expected_result), <<-RUBY
     class Thing < Types::BaseObject
       field :user_points, Int, null: false, dataload: Sources::UserPoints
     end
@@ -50,7 +49,7 @@ describe "DataloaderShorthand migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     module Thing
       include Types::BaseInterface
       field :user_points, Int
@@ -61,7 +60,7 @@ describe "DataloaderShorthand migration strategy" do
     end
     RUBY
 
-    assert_equal remove_legacy(expected_result), <<~RUBY
+    assert_equal cleanup(expected_result), <<~RUBY
     module Thing
       include Types::BaseInterface
       field :user_points, Int, dataload: { with: Sources::UserPoints, by: [SomeConst, 1, false, nil, :stuff, A::B] }
@@ -86,7 +85,7 @@ describe "DataloaderShorthand migration strategy" do
     end
     RUBY
 
-    assert_equal expected_result, add_future(<<~RUBY)
+    assert_equal expected_result, migrate(<<~RUBY)
     class Thing < BaseObject
       field :user_points, Int
 
@@ -102,7 +101,7 @@ describe "DataloaderShorthand migration strategy" do
     end
     RUBY
 
-    assert_equal remove_legacy(expected_result), <<~RUBY
+    assert_equal cleanup(expected_result), <<~RUBY
     class Thing < BaseObject
       field :user_points, Int, dataload: { association: true }
 

@@ -1,0 +1,21 @@
+Found 8 field definitions:
+
+DataloaderShorthand (4):
+
+  - Something.dataload_assoc      (:type_instance_method -> :dataload_assoc) @ test/graphql_migrate_execution/fixtures/dataload.rb:6
+  - Something.dataload_object_1   (:type_instance_method -> :dataload_object_1) @ test/graphql_migrate_execution/fixtures/dataload.rb:12
+  - Something.dataload_rec        (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:24
+  - Something.dataload_rec_2      (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:30
+
+DataloaderAll (1):
+
+  - Something.dataload_object_2   (:type_instance_method -> :dataload_object_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:18
+
+DataloaderManual (1):
+
+  - Something.dataload_complicated   (:type_instance_method -> :dataload_complicated) @ test/graphql_migrate_execution/fixtures/dataload.rb:36
+
+DataloaderBatch (2):
+
+  - Something.dataload_things        (:type_instance_method -> :dataload_things) @ test/graphql_migrate_execution/fixtures/dataload.rb:43
+  - Something.dataload_more_things   (:type_instance_method -> :dataload_things_again) @ test/graphql_migrate_execution/fixtures/dataload.rb:49

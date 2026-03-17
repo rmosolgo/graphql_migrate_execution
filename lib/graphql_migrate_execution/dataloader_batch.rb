@@ -9,13 +9,13 @@ module GraphqlMigrateExecution
 
     self.color = :GREEN
 
-    def add_future(field_definition, new_source)
-      inject_resolve_keyword(new_source, field_definition, :resolve_batch)
-      inject_batch_dataloader_method(field_definition, new_source, [:request_all, :load_all], :dataload_all, "flat_map")
+    def migrate(field_definition)
+      inject_resolve_keyword(field_definition, :resolve_batch)
+      inject_batch_dataloader_method(field_definition, [:request_all, :load_all], :dataload_all, "flat_map")
     end
 
-    def remove_legacy(field_definition, new_source)
-      remove_resolver_method(new_source, field_definition)
+    def cleanup(field_definition)
+      remove_resolver_method(field_definition)
     end
   end
 end
