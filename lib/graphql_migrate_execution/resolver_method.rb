@@ -15,13 +15,14 @@ module GraphqlMigrateExecution
       @calls_class = false
       @calls_dataloader = false
       @dataloader_call = false
+      @uses_current_path = false
     end
 
     attr_reader :name, :node, :parameter_names, :self_sends
 
     attr_reader :source_class_node, :source_arg_nodes, :load_arg_node, :dataload_association
 
-    attr_accessor :calls_object, :calls_context, :calls_class, :calls_dataloader
+    attr_accessor :calls_object, :calls_context, :calls_class, :calls_dataloader, :uses_current_path
 
     attr_accessor :dataloader_call
 

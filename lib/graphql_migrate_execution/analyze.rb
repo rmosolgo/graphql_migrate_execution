@@ -4,7 +4,7 @@ module GraphqlMigrateExecution
   class Analyze < Action
     def run
       super
-      message = "Found #{@total_field_definitions} field definitions:".dup
+      message = "Found #{@total_field_definitions} field definition#{@total_field_definitions == 1 ? "" : "s"}:".dup
 
       @field_definitions_by_strategy.each do |strategy_class, definitions|
         message << "\n\n#{color("#{color(strategy_class.name.split("::").last, strategy_class.color)} (#{definitions.size})", :BOLD)}:\n"

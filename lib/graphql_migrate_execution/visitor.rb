@@ -89,6 +89,15 @@ module GraphqlMigrateExecution
         case node.name
         when :dataloader, :dataload, :dataload_association, :dataload_record, :dataload_all
           @current_resolver_method.calls_dataloader = true
+        when :current_path
+          if node.receiver.is_a?(Prism::CallNode) && node.receiver.name == :context
+            @current_resolver_method.uses_current_path = true
+          end
+        when :[]
+          if node.receiver.is_a?(Prism::CallNode) && node.receiver.name == :context &&
+              (arg = node.arguments.arguments.first).is_a?(Prism::SymbolNode) && (arg.unescaped == "current_path")
+            @current_resolver_method.uses_current_path = true
+          end
         end
       end
       super

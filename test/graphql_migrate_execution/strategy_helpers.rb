@@ -1,3 +1,4 @@
+require "ostruct"
 module GraphQLMigrateExecutionStrategyHelpers
   def add_future(ruby_src)
     apply_action_method(ruby_src, :add_future)
@@ -5,6 +6,11 @@ module GraphQLMigrateExecutionStrategyHelpers
 
   def remove_legacy(ruby_src)
     apply_action_method(ruby_src, :remove_legacy)
+  end
+
+  def analyze(ruby_src)
+    action = GraphqlMigrateExecution::Analyze.new(OpenStruct.new(colorable: false), "app.rb", ruby_src)
+    action.run
   end
 
   def apply_action_method(ruby_src, action_method)

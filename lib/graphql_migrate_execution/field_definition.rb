@@ -19,6 +19,12 @@ module GraphqlMigrateExecution
     end
 
     def migration_strategy
+      if unsupported_extras?
+        return UnsupportedExtra
+      elsif resolver_method&.uses_current_path
+        return UnsupportedCurrentPath
+      end
+
       case resolve_mode
       when nil, :implicit_resolve
         Implicit
@@ -94,6 +100,13 @@ module GraphqlMigrateExecution
         @type_instance_method = @name
       end
       nil
+    end
+
+    def unsupported_extras?
+      (kwargs = @node.arguments.arguments.last).is_a?(Prism::KeywordHashNode) &&
+        (extras_el = kwargs.elements.find { |el| el.key.is_a?(Prism::SymbolNode) && el.key.unescaped == "extras" }) &&
+        ((extras_val = extras_el.value).is_a?(Prism::ArrayNode)) &&
+        (extras_val.elements.any? { |el| (!el.is_a?(Prism::SymbolNode)) || (el.unescaped != "ast_node" && el.unescaped != "lookahead")})
     end
   end
 end
