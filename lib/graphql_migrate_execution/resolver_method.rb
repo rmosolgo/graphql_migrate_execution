@@ -20,6 +20,7 @@ module GraphqlMigrateExecution
       @dataload_record = nil
       @dataload_record_using = nil
       @dataload_record_find_by = nil
+      @return_expressions = nil
     end
 
     attr_reader :name, :node, :parameter_names, :self_sends
@@ -122,6 +123,57 @@ module GraphqlMigrateExecution
         end
       else
         NotImplemented
+      end
+    end
+
+    def returns_hash?
+      return_expressions.all? { |exp_node| exp_node.is_a?(Prism::HashNode) || (exp_node.is_a?(Prism::CallNode) && exp_node.name == :new && exp_node.receiver.is_a?(Prism::ConstantReadNode) && exp_node.receiver.name == :Hash) }
+    end
+
+    def return_expressions
+      if @return_expressions.nil?
+        @return_expressions = []
+        find_return_expressions(@node)
+      end
+      @return_expressions
+    end
+
+    def returns_string_hash?
+      return_expressions.any? { |exp_node| exp_node.is_a?(Prism::HashNode) && exp_node.elements.all? { |el| el.key.is_a?(Prism::StringNode) } }
+    end
+
+    private
+
+    def find_return_expressions(node)
+      case node
+      when Prism::DefNode
+        find_return_expressions(node.body)
+      when Prism::StatementsNode
+        find_return_expressions(node.body.last)
+      when Prism::IfNode # TODO else, `?`, case
+        find_return_expressions(node.statements)
+        find_return_expressions(node.subsequent)
+      when Prism::ElseNode, Prism::WhenNode
+        find_return_expressions(node.statements)
+      when Prism::UnlessNode
+        find_return_expressions(node.statements)
+        find_return_expressions(node.else_clause)
+      when Prism::CaseNode
+        node.conditions.each do |cond_node|
+          find_return_expressions(cond_node)
+        end
+      when Prism::ReturnNode
+        find_return_expressions(node.arguments.first)
+      when Prism::LocalVariableReadNode
+        if (lv_write_node = @node.body.body.find { |n| n.is_a?(Prism::LocalVariableWriteNode) && n.name == node.name })
+          find_return_expressions(lv_write_node.value)
+        else
+          # Couldn't find assignment :'(
+          @return_expressions << node
+        end
+      else
+        # This is an expression that produces a return value
+        @return_expressions << node
       end
     end
   end

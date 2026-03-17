@@ -20,12 +20,19 @@ module GraphqlMigrateExecution
 
     def inject_field_keyword(new_source, field_definition, keyword, value)
       field_definition_source = field_definition.source
-      new_definition_source = if field_definition_source[/ [a-z_]+:/] # Does it already have keywords?
-        field_definition_source.sub(/(field.+?)((?: do)|(?: {)|$)/, "\\1, #{keyword}: #{value}\\2")
+      pair = "#{keyword}: #{value}"
+      if field_definition_source.include?(pair)
+        # Pass, don't re-add it
+      elsif field_definition_source.include?("#{keyword}:")
+        raise "Can't re-inject #{keyword} because it's already present in the definition:\n\n#{field_definition_source}"
       else
-        field_definition_source + ", #{keyword}: #{value}"
+        new_definition_source = if field_definition_source[/ [a-z_]+:/] # Does it already have keywords?
+          field_definition_source.sub(/(field.+?)((?: do)|(?: {)|$)/, "\\1, #{pair}\\2")
+        else
+          field_definition_source + ", #{pair}"
+        end
+        new_source.sub!(field_definition_source, new_definition_source)
       end
-      new_source.sub!(field_definition_source, new_definition_source)
     end
 
 

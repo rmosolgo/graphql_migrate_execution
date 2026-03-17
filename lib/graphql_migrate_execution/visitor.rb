@@ -7,6 +7,7 @@ module GraphqlMigrateExecution
       @type_definition_stack = []
       @current_field_definition = nil
       @current_resolver_method = nil
+      @is_public = true
     end
 
     def visit_class_node(node)
@@ -73,6 +74,10 @@ module GraphqlMigrateExecution
         else
           warn "GraphQL-Ruby warning: Skipping unrecognized field definition: #{node.inspect}"
         end
+      elsif node.receiver.nil? && ((node.name == :private) || (node.name == :protected))
+        @is_public = false
+      elsif node.receiver.nil? && node.name == :public
+        @is_public = true
       elsif @current_resolver_method
         if node.receiver.nil? || node.receiver.is_a?(Prism::SelfNode)
           @current_resolver_method.self_sends.add(node.name)
@@ -108,22 +113,30 @@ module GraphqlMigrateExecution
     end
 
     def visit_def_node(node)
-      if node.receiver.nil?
+      if @is_public
         td = @type_definition_stack.last
-        @current_resolver_method = td.resolver_method(node.name, node)
-      end
+        if node.receiver.nil?
+          @current_resolver_method = td.resolver_method(node.name, node)
+        end
 
-      body = node.body.body
-      if @current_resolver_method && body.length == 1 && (call_node = body.first).is_a?(Prism::CallNode)
-        case call_node.name
-        when :load, :request, :load_all, :request_all
-          if (call_node2 = call_node.receiver).is_a?(Prism::CallNode) && call_node2.name == :with
+        if node.name == :resolve && td.resolver_methods.size == 1
+          td.is_resolver = true
+        elsif td.is_resolver && td.remove_resolver_methods.size > 1
+          td.is_resolver = false
+        end
+
+        body = node.body.body
+        if @current_resolver_method && body.length == 1 && (call_node = body.first).is_a?(Prism::CallNode)
+          case call_node.name
+          when :load, :request, :load_all, :request_all
+            if (call_node2 = call_node.receiver).is_a?(Prism::CallNode) && call_node2.name == :with
+              @current_resolver_method.dataloader_call = true
+            end
+          when :dataload_record, :dataload_association, :dataload, :dataload_all
             @current_resolver_method.dataloader_call = true
+          else
+            # not a single dataloader call
           end
-        when :dataload_record, :dataload_association, :dataload, :dataload_all
-          @current_resolver_method.dataloader_call = true
-        else
-          # not a single dataloader call
         end
       end
       super

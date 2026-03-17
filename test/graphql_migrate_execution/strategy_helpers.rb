@@ -16,9 +16,9 @@ module GraphQLMigrateExecutionStrategyHelpers
   def apply_action_method(ruby_src, action_method)
     action = GraphqlMigrateExecution::Action.new(nil, "app.rb", ruby_src)
     action.run
-    field_definitions = action.type_definitions.each_value.first.field_definitions.values
     new_source = ruby_src.dup
-    field_definitions.each do |field_definition|
+    type_defn = action.type_definitions.each_value.find { |td| td.field_definitions.any? }
+    type_defn.field_definitions.each_value do |field_definition|
       @strategy_class.new.public_send(action_method, field_definition, new_source)
     end
     new_source

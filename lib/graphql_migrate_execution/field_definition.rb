@@ -25,6 +25,10 @@ module GraphqlMigrateExecution
         return UnsupportedCurrentPath
       end
 
+      if @type_definition.is_resolver && @type_definition.returns_hash?
+        return HashKey
+      end
+
       case resolve_mode
       when nil, :implicit_resolve
         Implicit
@@ -101,6 +105,8 @@ module GraphqlMigrateExecution
       end
       nil
     end
+
+    private
 
     def unsupported_extras?
       (kwargs = @node.arguments.arguments.last).is_a?(Prism::KeywordHashNode) &&
