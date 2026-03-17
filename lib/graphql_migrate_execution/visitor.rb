@@ -114,13 +114,13 @@ module GraphqlMigrateExecution
       end
 
       body = node.body.body
-      if body.length == 1 && (call_node = body.first).is_a?(Prism::CallNode)
+      if @current_resolver_method && body.length == 1 && (call_node = body.first).is_a?(Prism::CallNode)
         case call_node.name
         when :load, :request, :load_all, :request_all
           if (call_node2 = call_node.receiver).is_a?(Prism::CallNode) && call_node2.name == :with
             @current_resolver_method.dataloader_call = true
           end
-        when :dataload_record, :dataload_association, :dataload
+        when :dataload_record, :dataload_association, :dataload, :dataload_all
           @current_resolver_method.dataloader_call = true
         else
           # not a single dataloader call

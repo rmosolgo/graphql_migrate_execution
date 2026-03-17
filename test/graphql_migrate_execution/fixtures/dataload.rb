@@ -39,5 +39,17 @@ module Types
       a = 1 + 1
       dataload(Sources::SomeSource, :batch_key).load(a)
     end
+
+    field :dataload_things, [Types::Thing]
+
+    def dataload_things
+      dataloader.with(ThingsSource).load_all(object.thing_ids)
+    end
+
+    field :dataload_more_things, [Types::Thing], resolver_method: :dataload_things_again
+
+    def dataload_things_again
+      dataload_all(Sources::Namespace::ThingsSource, :stuff, object[:thing_ids])
+    end
   end
 end

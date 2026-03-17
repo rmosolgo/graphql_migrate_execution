@@ -43,5 +43,25 @@ module Types
       a = 1 + 1
       dataload(Sources::SomeSource, :batch_key).load(a)
     end
+
+    field :dataload_things, [Types::Thing], resolve_batch: true
+
+    def self.dataload_things(objects, context)
+      context.dataload_all(ThingsSource, objects.flat_map(&:thing_ids))
+    end
+
+    def dataload_things
+      dataloader.with(ThingsSource).load_all(object.thing_ids)
+    end
+
+    field :dataload_more_things, [Types::Thing], resolver_method: :dataload_things_again, resolve_batch: :dataload_things_again
+
+    def self.dataload_things_again(objects, context)
+      context.dataload_all(Sources::Namespace::ThingsSource, :stuff, objects.flat_map { |obj| obj[:thing_ids] })
+    end
+
+    def dataload_things_again
+      dataload_all(Sources::Namespace::ThingsSource, :stuff, object[:thing_ids])
+    end
   end
 end

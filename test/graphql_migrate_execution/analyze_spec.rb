@@ -113,7 +113,7 @@ ResolveStatic (2):
     source = File.read(path)
     message = GraphqlMigrateExecution::Analyze.new(OpenStruct.new, path, source).run
     expected_msg = <<~TXT.chomp
-Found 6 field definitions:
+Found 8 field definitions:
 
 DataloaderShorthand (4):
 
@@ -136,6 +136,13 @@ DataloaderManual (1):
   If you have a lot of these, consider opening up an issue on GraphQL-Ruby -- maybe we can find a way to programmatically support them.
 
   - Something.dataload_complicated   (:type_instance_method -> :dataload_complicated) @ test/graphql_migrate_execution/fixtures/dataload.rb:36
+
+DataloaderBatch (2):
+
+  These fields can be rewritten to dataload in a `resolve_batch:` method.
+
+  - Something.dataload_things        (:type_instance_method -> :dataload_things) @ test/graphql_migrate_execution/fixtures/dataload.rb:43
+  - Something.dataload_more_things   (:type_instance_method -> :dataload_things_again) @ test/graphql_migrate_execution/fixtures/dataload.rb:49
     TXT
     assert_equal(expected_msg, message)
   end

@@ -8,14 +8,24 @@ module GraphqlMigrateExecution
 
     def add_future(field_definition, new_source)
       inject_resolve_keyword(new_source, field_definition, :resolve_batch)
+      inject_batch_dataloader_method(field_definition, new_source, [:request, :load], :dataload, "map")
+    end
+
+    def remove_legacy(field_definition, new_source)
+      remove_resolver_method(new_source, field_definition)
+    end
+
+    private
+
+    def inject_batch_dataloader_method(field_definition, new_source, longhand_methods, shorthand_method, map_method)
       def_node = field_definition.resolver_method.node
       call_node = def_node.body.body.first
       case call_node.name
-      when :request, :load
+      when *longhand_methods
         load_arg_node = call_node.arguments.arguments.first
         with_node = call_node.receiver
         source_class_node, *source_args_nodes = with_node.arguments
-      when :dataload
+      when shorthand_method
         source_class_node, *source_args_nodes, load_arg_node = call_node.arguments.arguments
       else
         raise ArgumentError, "Unexpected DataloadAll method name: #{def_node.name.inspect}"
@@ -28,9 +38,9 @@ module GraphqlMigrateExecution
       when /object((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/
         call_chain = $1
         if /^\.[a-z0-9_A-Z]+$/.match?(call_chain)
-          "objects.map(&:#{call_chain[1..-1]})"
+          "objects.#{map_method}(&:#{call_chain[1..-1]})"
         else
-          "objects.map { |obj| obj#{call_chain} }"
+          "objects.#{map_method} { |obj| obj#{call_chain} }"
         end
       else
         raise ArgumentError, "Failed to transform Dataloader argument: #{old_load_arg_s.inspect}"
@@ -50,10 +60,6 @@ module GraphqlMigrateExecution
 
       combined_new_source = new_method_source + "\n" + old_method_source
       new_source.sub!(old_method_source, combined_new_source)
-    end
-
-    def remove_legacy(field_definition, new_source)
-      remove_resolver_method(new_source, field_definition)
     end
   end
 end

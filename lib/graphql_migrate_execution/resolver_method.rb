@@ -47,6 +47,7 @@ module GraphqlMigrateExecution
       calls_to_self.delete(:dataload_association)
       calls_to_self.delete(:dataload_record)
       calls_to_self.delete(:dataload)
+      calls_to_self.delete(:dataload_all)
 
       # Global-ish methods:
       calls_to_self.delete(:raise)
@@ -106,7 +107,7 @@ module GraphqlMigrateExecution
             case call_node.name
             when :load, :request, :dataload
               DataloaderAll
-            when :load_all, :request_all
+            when :load_all, :request_all, :dataload_all
               DataloaderBatch
             when :dataload_association, :dataload_record
               DataloaderShorthand
