@@ -2,11 +2,9 @@
 require_relative "./dataloader_all"
 
 module GraphqlMigrateExecution
-  class DataloaderBatch < DataloaderAll
-    DESCRIPTION = <<~DESC
-    These fields can be rewritten to dataload in a `resolve_batch:` method.
-    DESC
+  # These fields can be rewritten to dataload in a `resolve_batch:` method.
 
+  class DataloaderBatch < DataloaderAll
     self.color = :GREEN
 
     def migrate(field_definition)

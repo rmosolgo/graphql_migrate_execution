@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
+  # These fields can be migrated to a `.load_all` call.
   class DataloaderAll < Strategy
-    DESCRIPTION = <<~DESC
-    These fields can be migrated to a `.load_all` call.
-    DESC
     self.color = :GREEN
 
     def migrate(field_definition)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
+  # These can be converted with `resolve_static:`. Dataloader was not detected in these resolver methods.
   class ResolveStatic < Strategy
-    DESCRIPTION = "These can be converted with `resolve_static:`. Dataloader was not detected in these resolver methods."
     self.color = :GREEN
 
     def migrate(field_definition)

@@ -22,7 +22,6 @@ TEXT
 
 parser.on("--migrate", "Update the files with future-compatibile configuration")
 parser.on("--cleanup", "Remove resolver instance methods for GraphQL-Ruby's old runtime")
-parser.on("--concise", "Don't print migration strategy descriptions")
 parser.on("--dry-run", "Don't actually modify files")
 
 # TODO:

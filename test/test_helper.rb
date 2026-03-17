@@ -35,7 +35,7 @@ module MigrationHelpers
   end
 
   def run_action(ruby_src, filename, action_method)
-    action = GraphqlMigrateExecution::Action.new(OpenStruct.new(colorable: false, skip_description: true, action_method: action_method), filename, ruby_src)
+    action = GraphqlMigrateExecution::Action.new(OpenStruct.new(colorable: false, action_method: action_method), filename, ruby_src)
     action.run
     action
   end

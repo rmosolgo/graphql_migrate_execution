@@ -21,9 +21,6 @@ module GraphqlMigrateExecution
       case @action_method
       when :analyze
         @message << "\n#{colorize("#{colorize(self.class.strategy_name, self.class.color)} (#{@field_definitions.size})", :BOLD)}:\n"
-        if !@migration.skip_description
-          @message << "\n#{self.class::DESCRIPTION.split("\n").map { |l| l.length > 0 ? "  #{l}" : l }.join("\n")}\n"
-        end
         max_path = @field_definitions.map { |f| f.path.size }.max + 2
         @field_definitions.each do |field_defn|
           name = field_defn.path.ljust(max_path)

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
+  # These fields can use a `dataload: ...` configuration.
   class DataloaderShorthand < Strategy
-    DESCRIPTION = <<~DESC
-    These fields can use a `dataload: ...` configuration.
-    DESC
     self.color = :GREEN
 
     def migrate(field_definition)

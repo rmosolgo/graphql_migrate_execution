@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
+  # These can be future-proofed with `hash_key: ...` configurations
   class HashKey < Strategy
-    DESCRIPTION = "These can be future-proofed with `hash_key: ...` configurations"
     self.color = :GREEN
 
     def migrate(field_definition)
