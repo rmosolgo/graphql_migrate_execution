@@ -4,8 +4,8 @@ require "graphql_migrate_execution"
 require "ostruct"
 
 module MigrationHelpers
-  def migrate(ruby_src, filename = "app.rb")
-    action = run_action(ruby_src, filename, :migrate)
+  def migrate(ruby_src, filename = "app.rb", implicit: nil)
+    action = run_action(ruby_src, filename, :migrate, implicit: implicit)
     action.result_source
   end
 
@@ -29,13 +29,13 @@ module MigrationHelpers
     assert_equal expected_source, modified_source, "#{action_method} causes #{source_file} to match #{expected_file}"
   end
 
-  def analyze(ruby_src, filename = "app.rb")
-    action = run_action(ruby_src, filename, :analyze)
+  def analyze(ruby_src, filename = "app.rb", implicit: nil)
+    action = run_action(ruby_src, filename, :analyze, implicit: implicit)
     action.message
   end
 
-  def run_action(ruby_src, filename, action_method)
-    action = GraphqlMigrateExecution::Action.new(OpenStruct.new(colorable: false, action_method: action_method), filename, ruby_src)
+  def run_action(ruby_src, filename, action_method, implicit: nil)
+    action = GraphqlMigrateExecution::Action.new(OpenStruct.new(colorable: false, action_method: action_method, implicit: implicit), filename, ruby_src)
     action.run
     action
   end

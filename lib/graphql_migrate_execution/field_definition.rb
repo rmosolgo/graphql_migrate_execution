@@ -31,7 +31,11 @@ module GraphqlMigrateExecution
 
       case resolve_mode
       when nil, :implicit_resolve
-        Implicit
+        if @type_definition.migration.implicit == "ignore"
+          DoNothing
+        else
+          Implicit
+        end
       when :hash_key, :object_direct_method, :dig
         DoNothing
       when :already_migrated

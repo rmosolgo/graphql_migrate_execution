@@ -1,14 +1,15 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
   class TypeDefinition
-    def initialize(name)
+    def initialize(name, migration)
       @name = name
+      @migration = migration
       @field_definitions = {}
       @resolver_methods = {}
       @is_resolver = false
     end
 
-    attr_accessor :is_resolver
+    attr_accessor :is_resolver, :migration
 
     attr_reader :resolver_methods, :name, :field_definitions
 

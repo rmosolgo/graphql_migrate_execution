@@ -14,7 +14,7 @@ module GraphqlMigrateExecution
 
     def run
       parse_result = Prism.parse(@ruby_source, filepath: @filepath)
-      type_definitions = Hash.new { |h, k| h[k] = TypeDefinition.new(k) }
+      type_definitions = Hash.new { |h, k| h[k] = TypeDefinition.new(k, @migration) }
       visitor = Visitor.new(@ruby_source, type_definitions)
       visitor.visit(parse_result.value)
       total_field_definitions = 0

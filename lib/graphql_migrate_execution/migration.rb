@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
   class Migration
-    def initialize(glob, dry_run: false, migrate: false, cleanup: false, only: nil, implicit: nil, colorable: IRB::Color.colorable?)
+    def initialize(glob, dry_run: false, migrate: false, cleanup: false, implicit: nil, colorable: IRB::Color.colorable?)
       @glob = glob
       @dry_run = dry_run || (migrate == false && cleanup == false)
       @colorable = colorable
-      @only = only
       @implicit = implicit
       @action_method = if migrate
         :migrate
@@ -16,7 +15,7 @@ module GraphqlMigrateExecution
       end
     end
 
-    attr_reader :colorable, :action_method
+    attr_reader :colorable, :action_method, :implicit
 
     def run
       Dir.glob(@glob).each do |filepath|

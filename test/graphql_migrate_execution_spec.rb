@@ -15,6 +15,21 @@ describe "GraphqlMigrateExecution" do
     assert_includes readme_contents, help_text
   end
 
+  it "takes an implicit option" do
+    starting_content = File.read("test/graphql_migrate_execution/fixtures/implicit.rb")
+    FileUtils.mkdir_p("tmp")
+    File.write("tmp/implicit.rb", starting_content)
+    text, _status = Open3.capture2e("bin/graphql_migrate_execution --implicit hash_key_string --migrate tmp/implicit.rb")
+    migrated_content = File.read("test/graphql_migrate_execution/fixtures/implicit.migrate.rb")
+    expected_output = <<~TXT
+Found 1 field definition:
+
+Implicit MyObject.x  @ tmp/implicit.rb:2
+    TXT
+    assert_equal expected_output, text
+    assert_equal migrated_content, File.read("tmp/implicit.rb")
+  end
+
   it "modifies files, except when --dry-run" do
     starting_content = File.read("test/graphql_migrate_execution/fixtures/dataload.rb")
     FileUtils.mkdir_p("tmp")
