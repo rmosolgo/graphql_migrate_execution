@@ -1,6 +1,18 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
-  # These fields can be migrated to a `.load_all` call.
+  # This field calls dataloader with some property of `object`. It can be migrated to use `dataload_all(...)` and `objects.map { |object| ... }`.
+  #
+  # ```ruby
+  # # Previous:
+  # def my_field
+  #   dataload(Sources::GetThing, object.some_attribute)
+  # end
+  #
+  # # New:
+  # def self.my_field(objects, context)
+  #   context.dataload_all(Sources::GetThing, objects.map { |object| object.some_attribute })
+  # end
+  # ```
   class DataloaderAll < Strategy
     self.color = :GREEN
 

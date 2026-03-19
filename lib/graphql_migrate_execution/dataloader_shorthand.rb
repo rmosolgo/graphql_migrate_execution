@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
-  # These fields can use a `dataload: ...` configuration.
+  # These fields can use a `dataload: ...` configuration. They use a single, simple dataloader call:
+  #
+  # - `dataload_assocation(...)`
+  # - `dataload_record(...)`
+  # - `dataload(...)` or `dataloader.with(...).load(...)`
+  #
+  # and they don't make calls on `self` inside those expressions (except for `object` and `context`).
   class DataloaderShorthand < Strategy
     self.color = :GREEN
 

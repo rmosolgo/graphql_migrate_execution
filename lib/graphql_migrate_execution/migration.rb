@@ -4,6 +4,9 @@ module GraphqlMigrateExecution
   class Migration
     def initialize(glob, dry_run: false, migrate: false, cleanup: false, implicit: nil, colorable: IRB::Color.colorable?)
       @glob = glob
+      if @glob.end_with?("/")
+        @glob += "*.rb"
+      end
       @dry_run = dry_run || (migrate == false && cleanup == false)
       @colorable = colorable
       @implicit = implicit

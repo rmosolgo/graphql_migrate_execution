@@ -8,12 +8,6 @@ RDoc::Task.new do |rdoc|
   rdoc.rdoc_dir = "_site"
   rdoc.title = "GraphqlMigrateExecution"
 end
-# footer_content:
-#   GRAPHQL:
-#     GraphQL-Ruby: https://graphql-ruby.org
-#   RESOURCES:
-#     GitHub Repository: https://github.com/rmosolgo/graphql_migrate_execution
-#     Issue Tracker: https://github.com/rmosolgo/graphql_migrate_execution
 
 Minitest::TestTask.create(:test) do |t|
   t.libs << "test"

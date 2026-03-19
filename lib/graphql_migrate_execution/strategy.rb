@@ -34,7 +34,7 @@ module GraphqlMigrateExecution
         indent_size = @action.strategy_name_padding + 1
         indent = " " * indent_size
         indent2_size = @action.field_name_padding
-        @message << "\n#{colorize(self.class.strategy_name, self.class.color).ljust(indent_size)}"
+        @message << "\n#{colorize(self.class.strategy_name.ljust(indent_size), self.class.color)}"
         first = true
         @field_definitions.each do |field_defn|
           @message << "#{first ? "" : "#{indent}"}#{field_defn.path.ljust(indent2_size)}  @ #{@filepath}:#{field_defn.source_line}\n"

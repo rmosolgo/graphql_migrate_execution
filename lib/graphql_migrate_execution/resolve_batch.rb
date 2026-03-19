@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
+  # This is just used for cleaning up code.
   class ResolveBatch < Strategy
     self.color = :GREEN
 
