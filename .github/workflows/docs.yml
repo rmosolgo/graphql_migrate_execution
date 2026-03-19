@@ -23,7 +23,7 @@ jobs:
       - name: Setup Ruby
         uses: ruby/setup-ruby@dffb23f65a78bba8db45d387d5ea1bbd6be3ef18 # v1.293.0
         with:
-          ruby-version: latest
+          ruby-version: ruby
           bundler-cache: true
       - name: Setup Pages
         id: pages
