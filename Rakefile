@@ -1,5 +1,8 @@
 require "minitest/test_task"
 require 'bundler/gem_tasks'
+require "rdoc/task"
+
+RDoc::Task.new
 
 Minitest::TestTask.create(:test) do |t|
   t.libs << "test"
