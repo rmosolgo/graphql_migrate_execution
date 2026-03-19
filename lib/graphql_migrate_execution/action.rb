@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
   class Action
+    module Colorize
+      private
+      def colorize(str, color_or_colors)
+        IRB::Color.colorize(str, Array(color_or_colors), colorable: @migration.colorable)
+      end
+    end
+
+    include Colorize
+
     def initialize(migration, filepath, ruby_source)
       @migration = migration
       @filepath = filepath
@@ -8,6 +17,7 @@ module GraphqlMigrateExecution
       @message = "".dup
       @result_source = @ruby_source.dup
       @strategy_name_padding = nil
+      @field_name_padding = nil
     end
 
     attr_reader :message, :result_source, :migration, :filepath, :strategy_name_padding, :field_name_padding
@@ -27,6 +37,7 @@ module GraphqlMigrateExecution
         end
       end
 
+      @message << "#{colorize(@filepath, :BOLD)}: "
       @message << "Found #{total_field_definitions} field definition#{total_field_definitions == 1 ? "" : "s"}:\n"
       @strategy_name_padding = field_definitions_by_strategy.each_key.map { |sc| sc.strategy_name.size }.max
       @field_name_padding = field_definitions_by_strategy.each_value.flat_map { |fds| fds.map { |fd| fd.path.size } }.max
@@ -34,6 +45,7 @@ module GraphqlMigrateExecution
         strategy = strategy_class.new(self, field_definitions)
         strategy.run
       end
+      @message << "\n"
     end
   end
 end

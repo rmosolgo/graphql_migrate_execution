@@ -1,6 +1,9 @@
 # frozen_string_literal: true
+require_relative "./action"
+
 module GraphqlMigrateExecution
   class Strategy
+    include Action::Colorize
     def initialize(action, field_definitions)
       @action = action
       @migration = action.migration
@@ -50,10 +53,6 @@ module GraphqlMigrateExecution
     end
 
     private
-
-    def colorize(str, color_or_colors)
-      IRB::Color.colorize(str, Array(color_or_colors), colorable: @migration.colorable)
-    end
 
     def inject_resolve_keyword(field_definition, keyword)
       value = field_definition.future_resolve_shorthand.inspect

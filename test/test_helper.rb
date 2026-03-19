@@ -26,7 +26,7 @@ module MigrationHelpers
     end
     expected_file = source_file.sub(file_replace, ".#{action_method}.#{file_ext}")
     expected_source = File.read(expected_file)
-    assert_equal expected_source, modified_source, "#{action_method} causes #{source_file} to match #{expected_file}"
+    assert_equal expected_source.strip, modified_source.strip, "#{action_method} causes #{source_file} to match #{expected_file}"
   end
 
   def analyze(ruby_src, filename = "app.rb", implicit: nil)

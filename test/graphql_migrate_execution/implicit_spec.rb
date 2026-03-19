@@ -20,12 +20,13 @@ describe "Implicit migration strategy" do
 
 
     expected_analyze_result = <<-TEXT
-Found 2 field definitions:
+app.rb: Found 2 field definitions:
 
 Implicit (2):
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
+
     TEXT
 
     assert_equal expected_analyze_result, analyze(input)
@@ -76,12 +77,13 @@ Implicit (2):
     RUBY
 
     expected_analyze_result = <<-TEXT
-Found 2 field definitions:
+app.rb: Found 2 field definitions:
 
 DoNothing (2):
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
+
     TEXT
 
     assert_equal expected_analyze_result, analyze(input, implicit: "ignore")

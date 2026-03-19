@@ -20,13 +20,10 @@ parser.banner = <<~TEXT
 
 TEXT
 
-parser.on("--migrate", "Update the files with future-compatibile configuration")
+parser.on("--migrate", "Update the files with future-compatible configuration")
 parser.on("--cleanup", "Remove resolver instance methods for GraphQL-Ruby's old runtime")
 parser.on("--dry-run", "Don't actually modify files")
-
-# TODO:
-parser.on("--implicit MODE", "Handle implicit field resolution using MODE")
-parser.on("--only PATTERN", "Only analyze or update fields whose path (`Type.field`) matches /PATTERN/")
+parser.on("--implicit [MODE]", String, "Handle implicit field resolution this way (ignore / hash_key / hash_key_string)")
 
 parser.parse!(into: options)
 

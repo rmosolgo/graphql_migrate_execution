@@ -22,9 +22,10 @@ describe "GraphqlMigrateExecution" do
     text, _status = Open3.capture2e("bin/graphql_migrate_execution --implicit hash_key_string --migrate tmp/implicit.rb")
     migrated_content = File.read("test/graphql_migrate_execution/fixtures/implicit.migrate.rb")
     expected_output = <<~TXT
-Found 1 field definition:
+tmp/implicit.rb: Found 1 field definition:
 
 Implicit MyObject.x  @ tmp/implicit.rb:2
+
     TXT
     assert_equal expected_output, text
     assert_equal migrated_content, File.read("tmp/implicit.rb")
@@ -36,7 +37,7 @@ Implicit MyObject.x  @ tmp/implicit.rb:2
     File.write("tmp/dataload.rb", starting_content)
     text, _status = Open3.capture2e("bin/graphql_migrate_execution --migrate --dry-run tmp/dataload.rb")
     expected_output = <<~TXT
-Found 8 field definitions:
+tmp/dataload.rb: Found 8 field definitions:
 
 DataloaderShorthand Something.dataload_assoc        @ tmp/dataload.rb:6
                     Something.dataload_object_1     @ tmp/dataload.rb:12
@@ -49,6 +50,7 @@ DataloaderManual    Something.dataload_complicated  @ tmp/dataload.rb:36
 
 DataloaderBatch     Something.dataload_things       @ tmp/dataload.rb:43
                     Something.dataload_more_things  @ tmp/dataload.rb:49
+
     TXT
 
     assert_equal starting_content, File.read("tmp/dataload.rb")

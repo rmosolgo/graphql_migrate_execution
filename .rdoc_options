@@ -1,0 +1,12 @@
+op_dir: _site # for GitHub Pages and should match the config of RDoc task in Rakefile
+title: GraphqlMigrateExecution
+main_page: readme.md
+autolink_excluded_words:
+  - GraphQL
+markup: markdown
+footer_content:
+  GRAPHQL:
+    GraphQL-Ruby: https://graphql-ruby.org
+  RESOURCES:
+    GitHub Repository: https://github.com/rmosolgo/graphql_migrate_execution
+    Issue Tracker: https://github.com/rmosolgo/graphql_migrate_execution

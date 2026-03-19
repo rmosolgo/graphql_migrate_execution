@@ -25,11 +25,10 @@ Inspect the files matched by `glob` and ...
 
 Options:
 
-        --migrate                    Update the files with future-compatibile configuration
+        --migrate                    Update the files with future-compatible configuration
         --cleanup                    Remove resolver instance methods for GraphQL-Ruby's old runtime
         --dry-run                    Don't actually modify files
-        --implicit MODE              Handle implicit field resolution using MODE
-        --only PATTERN               Only analyze or update fields whose path (`Type.field`) matches /PATTERN/
+        --implicit [MODE]            Handle implicit field resolution this way (ignore / hash_key / hash_key_string)
 ```
 
 ## Develop

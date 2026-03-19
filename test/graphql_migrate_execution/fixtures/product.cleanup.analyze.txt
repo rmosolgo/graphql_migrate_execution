@@ -1,4 +1,4 @@
-Found 9 field definitions:
+test/graphql_migrate_execution/fixtures/product.cleanup.rb: Found 9 field definitions:
 
 Implicit (1):
 

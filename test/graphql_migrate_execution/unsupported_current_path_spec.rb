@@ -17,11 +17,12 @@ describe "UnsupportedCurrentPath migration strategy" do
 
 
     expected_result = <<~TEXT
-Found 1 field definition:
+app.rb: Found 1 field definition:
 
 UnsupportedCurrentPath (1):
 
   - Thing.user_points   (:type_instance_method -> :user_points) @ app.rb:2
+
     TEXT
 
     assert_equal expected_result, analyze(input)
@@ -40,11 +41,12 @@ UnsupportedCurrentPath (1):
 
 
     expected_result = <<~TEXT
-Found 1 field definition:
+app.rb: Found 1 field definition:
 
 UnsupportedCurrentPath (1):
 
   - Thing.user_points   (:type_instance_method -> :user_points) @ app.rb:2
+
     TEXT
 
     assert_equal expected_result, analyze(input)

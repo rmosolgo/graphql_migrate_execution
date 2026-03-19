@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 module GraphqlMigrateExecution
+  # A run of this tool, called by `bin/graphql_migrate_execution`.
   class Migration
     def initialize(glob, dry_run: false, migrate: false, cleanup: false, implicit: nil, colorable: IRB::Color.colorable?)
       @glob = glob

@@ -1,4 +1,4 @@
-Found 8 field definitions:
+test/graphql_migrate_execution/fixtures/dataload.rb: Found 8 field definitions:
 
 DataloaderShorthand (4):
 

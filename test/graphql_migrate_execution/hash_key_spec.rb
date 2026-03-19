@@ -23,12 +23,13 @@ describe "HashKey migration strategy" do
 
 
     expected_analyze_result = <<-TEXT
-Found 2 field definitions:
+app.rb: Found 2 field definitions:
 
 HashKey (2):
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
+
     TEXT
 
     assert_equal expected_analyze_result, analyze(input)
@@ -73,12 +74,13 @@ HashKey (2):
 
 
     expected_analyze_result = <<~TEXT
-Found 2 field definitions:
+app.rb: Found 2 field definitions:
 
 HashKey (2):
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
+
     TEXT
 
     assert_equal expected_analyze_result, analyze(input)
@@ -127,12 +129,13 @@ HashKey (2):
 
 
     expected_analyze_result = <<~TEXT
-Found 2 field definitions:
+app.rb: Found 2 field definitions:
 
 Implicit (2):
 
   - DoSomething.result   (nil -> nil) @ app.rb:3
   - DoSomething.error    (nil -> nil) @ app.rb:4
+
     TEXT
 
     assert_equal expected_analyze_result, analyze(input)

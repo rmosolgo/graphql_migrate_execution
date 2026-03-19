@@ -17,11 +17,12 @@ describe "UnsupportedExtra migration strategy" do
 
 
     expected_result = <<-TEXT
-Found 1 field definition:
+app.rb: Found 1 field definition:
 
 UnsupportedExtra (1):
 
   - Thing.user_points   (:type_instance_method -> :user_points) @ app.rb:2
+
     TEXT
 
     assert_equal expected_result, analyze(input)
@@ -36,11 +37,12 @@ UnsupportedExtra (1):
 
 
     expected_result = <<-TEXT
-Found 1 field definition:
+app.rb: Found 1 field definition:
 
 DoNothing (1):
 
   - Thing.user_points   (:object_direct_method -> :points) @ app.rb:2
+
     TEXT
 
     assert_equal expected_result, analyze(input)
