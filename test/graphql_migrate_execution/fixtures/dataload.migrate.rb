@@ -47,7 +47,9 @@ module Types
     field :dataload_things, [Types::Thing], resolve_batch: true
 
     def self.dataload_things(objects, context)
-      context.dataload_all(ThingsSource, objects.flat_map(&:thing_ids))
+      requests = objects.map { |object| context.dataloader.with(ThingsSource).request_all(object.thing_ids) }
+      requests.map! { |reqs| reqs.map!(&:load) } # replace dataloader requests with loaded data
+      requests
     end
 
     def dataload_things
@@ -57,7 +59,9 @@ module Types
     field :dataload_more_things, [Types::Thing], resolver_method: :dataload_things_again, resolve_batch: :dataload_things_again
 
     def self.dataload_things_again(objects, context)
-      context.dataload_all(Sources::Namespace::ThingsSource, :stuff, objects.flat_map { |obj| obj[:thing_ids] })
+      requests = objects.map { |object| context.dataloader.with(Sources::Namespace::ThingsSource, :stuff).request_all(object[:thing_ids]) }
+      requests.map! { |reqs| reqs.map!(&:load) } # replace dataloader requests with loaded data
+      requests
     end
 
     def dataload_things_again
