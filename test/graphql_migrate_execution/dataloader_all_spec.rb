@@ -7,7 +7,8 @@ describe "DataloaderAll migration strategy" do
   it "turns single dataloader .load calls to list calls" do
     input = <<-RUBY # Don't use squiggles to check leading whitespace preservation
     class Thing < Types::BaseObject
-      field :user_points, Int
+      field :user_points, Int,
+        null: false
 
       def user_points
         context.dataloader.with(Sources::UserPoints).load(object.thing.stuff)
@@ -18,7 +19,8 @@ describe "DataloaderAll migration strategy" do
 
     expected_result = <<-RUBY
     class Thing < Types::BaseObject
-      field :user_points, Int, resolve_batch: true
+      field :user_points, Int, resolve_batch: true,
+        null: false
 
       def self.user_points(objects, context)
         context.dataload_all(Sources::UserPoints, objects.map { |obj| obj.thing.stuff })

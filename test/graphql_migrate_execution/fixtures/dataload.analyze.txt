@@ -1,4 +1,4 @@
-test/graphql_migrate_execution/fixtures/dataload.rb: Found 8 field definitions:
+test/graphql_migrate_execution/fixtures/dataload.rb: Found 9 field definitions:
 
 DataloaderShorthand (4):
 
@@ -7,9 +7,10 @@ DataloaderShorthand (4):
   - Something.dataload_rec        (:type_instance_method -> :dataload_rec) @ test/graphql_migrate_execution/fixtures/dataload.rb:24
   - Something.dataload_rec_2      (:type_instance_method -> :dataload_rec_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:30
 
-DataloaderAll (1):
+DataloaderAll (2):
 
   - Something.dataload_object_2   (:type_instance_method -> :dataload_object_2) @ test/graphql_migrate_execution/fixtures/dataload.rb:18
+  - Something.dataload_constant   (:type_instance_method -> :dataload_constant) @ test/graphql_migrate_execution/fixtures/dataload.rb:55
 
 DataloaderManual (1):
 

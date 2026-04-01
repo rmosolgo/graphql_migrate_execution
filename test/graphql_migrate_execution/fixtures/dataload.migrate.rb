@@ -67,5 +67,15 @@ module Types
     def dataload_things_again
       dataload_all(Sources::Namespace::ThingsSource, :stuff, object[:thing_ids])
     end
+
+    field :dataload_constant, Integer, resolve_batch: true
+
+    def self.dataload_constant(objects, context)
+      context.dataload_all(SomeSource, context, objects.map { |obj| obj.some.call })
+    end
+
+    def dataload_constant
+      dataloader.with(SomeSource, context).load(Thing.some.call)
+    end
   end
 end

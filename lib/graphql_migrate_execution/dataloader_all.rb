@@ -45,7 +45,8 @@ module GraphqlMigrateExecution
       new_load_arg_s = case old_load_arg_s
       when "object"
         "objects"
-      when /object((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/
+      when /object((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/, /[A-Z][a-zA-Z_0-9]*((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/
+        # A call starting with `object.` or a constant
         call_chain = $1
         if /^\.[a-z0-9_A-Z]+$/.match?(call_chain)
           "objects.#{map_method}(&:#{call_chain[1..-1]})"

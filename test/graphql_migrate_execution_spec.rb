@@ -37,7 +37,7 @@ Implicit MyObject.x  @ tmp/implicit.rb:2
     File.write("tmp/dataload.rb", starting_content)
     text, _status = Open3.capture2e("bin/graphql_migrate_execution --migrate --dry-run tmp/dataload.rb")
     expected_output = <<~TXT
-tmp/dataload.rb: Found 8 field definitions:
+tmp/dataload.rb: Found 9 field definitions:
 
 DataloaderShorthand Something.dataload_assoc        @ tmp/dataload.rb:6
                     Something.dataload_object_1     @ tmp/dataload.rb:12
@@ -45,6 +45,7 @@ DataloaderShorthand Something.dataload_assoc        @ tmp/dataload.rb:6
                     Something.dataload_rec_2        @ tmp/dataload.rb:30
 
 DataloaderAll       Something.dataload_object_2     @ tmp/dataload.rb:18
+                    Something.dataload_constant     @ tmp/dataload.rb:55
 
 DataloaderManual    Something.dataload_complicated  @ tmp/dataload.rb:36
 

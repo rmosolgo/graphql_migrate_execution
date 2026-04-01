@@ -51,5 +51,11 @@ module Types
     def dataload_things_again
       dataload_all(Sources::Namespace::ThingsSource, :stuff, object[:thing_ids])
     end
+
+    field :dataload_constant, Integer
+
+    def dataload_constant
+      dataloader.with(SomeSource, context).load(Thing.some.call)
+    end
   end
 end

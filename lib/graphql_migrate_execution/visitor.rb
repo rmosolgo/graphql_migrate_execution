@@ -38,7 +38,7 @@ module GraphqlMigrateExecution
             when "hash_key"
               @current_field_definition.resolve_mode ||= :hash_key
               @current_field_definition.hash_key = get_keyword_value(assoc.value)
-            when "resolver"
+            when "resolver", "mutation", "subscription"
               @current_field_definition.resolve_mode ||= :resolver
               @current_field_definition.resolver = get_keyword_value(assoc.value)
             when "method"
@@ -50,7 +50,7 @@ module GraphqlMigrateExecution
             when "dig"
               @current_field_definition.resolve_mode ||= :dig
               @current_field_definition.dig = get_keyword_value(assoc.value)
-            when "resolve_each", "resolve_static", "resolve_batch"
+            when "resolve_each", "resolve_static", "resolve_batch", "resolve_legacy_instance_method"
               # These should override any other keywords that are discovered
               @current_field_definition.resolve_mode = :already_migrated
               @current_field_definition.already_migrated = { assoc.key.unescaped.to_sym => get_keyword_value(assoc.value) }
@@ -113,20 +113,29 @@ module GraphqlMigrateExecution
     end
 
     def visit_def_node(node)
-      if @is_public
-        td = @type_definition_stack.last
+      if @is_public && (td = @type_definition_stack.last)
         if node.receiver.nil?
           @current_resolver_method = td.resolver_method(node.name, node)
         end
 
         if node.name == :resolve && td.resolver_methods.size == 1
           td.is_resolver = true
-        elsif td.is_resolver && td.remove_resolver_methods.size > 1
+        elsif td.is_resolver && td.resolver_methods.size > 1
           td.is_resolver = false
         end
 
-        body = node.body.body
-        if @current_resolver_method && body.length == 1 && (call_node = body.first).is_a?(Prism::CallNode)
+        body = case node.body
+        when Prism::StatementsNode
+          node.body.body
+        when Prism::BeginNode
+          node.body.statements.body
+        when nil
+          nil
+        else
+          raise ArgumentError, "Unexpected DefNode body for `def #{node.name}`: #{node.body.class}"
+        end
+
+        if body && @current_resolver_method && body.length == 1 && (call_node = body.first).is_a?(Prism::CallNode)
           case call_node.name
           when :load, :request, :load_all, :request_all
             if (call_node2 = call_node.receiver).is_a?(Prism::CallNode) && call_node2.name == :with
