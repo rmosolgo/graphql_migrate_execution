@@ -71,7 +71,7 @@ module Types
     field :dataload_constant, Integer, resolve_batch: true
 
     def self.dataload_constant(objects, context)
-      context.dataload_all(SomeSource, context, objects.map { |obj| obj.some.call })
+      context.dataload_all(SomeSource, context, objects.map { |_obj| Thing.some.call })
     end
 
     def dataload_constant

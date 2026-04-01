@@ -45,14 +45,16 @@ module GraphqlMigrateExecution
       new_load_arg_s = case old_load_arg_s
       when "object"
         "objects"
-      when /object((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/, /[A-Z][a-zA-Z_0-9]*((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/
-        # A call starting with `object.` or a constant
+      when /object((\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/
         call_chain = $1
         if /^\.[a-z0-9_A-Z]+$/.match?(call_chain)
           "objects.#{map_method}(&:#{call_chain[1..-1]})"
         else
           "objects.#{map_method} { |obj| obj#{call_chain} }"
         end
+      when /([A-Z][a-zA-Z_0-9]*(\.|\[)[:a-zA-Z0-9_\.\"\'\[\]]+)/
+        # Constant call
+        "objects.#{map_method} { |_obj| #{$1} }"
       else
         raise ArgumentError, "Failed to transform Dataloader argument: #{old_load_arg_s.inspect}"
       end
