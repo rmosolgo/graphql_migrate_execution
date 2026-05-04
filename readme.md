@@ -186,4 +186,5 @@ bundle exec rake test # TEST=test/...
 
 ## TODO
 
+- [ ] Interfaces: use a `resolver_methods` block with instance methods
 - [ ] Does `--cleanup` work on my app? I haven't run it yet.
