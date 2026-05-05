@@ -54,6 +54,9 @@ module GraphqlMigrateExecution
               # These should override any other keywords that are discovered
               @current_field_definition.resolve_mode = :already_migrated
               @current_field_definition.already_migrated = { assoc.key.unescaped.to_sym => get_keyword_value(assoc.value) }
+            when "fallback_value"
+              @current_field_definition.resolve_mode ||= :fallback_value
+              @current_field_definition.fallback_value = get_keyword_value(assoc.value)
             else
               # fallback_value,  connection, extensions, extras, resolver, mutation, subscription
               @current_field_definition.unknown_options << assoc.key.unescaped
@@ -67,9 +70,8 @@ module GraphqlMigrateExecution
     def visit_call_node(node)
       if node.receiver.nil? && node.name == :field
         first_arg = node.arguments.arguments.first # rubocop:disable Development/ContextIsPassedCop
-        if first_arg.is_a?(Prism::SymbolNode)
+        if first_arg.is_a?(Prism::SymbolNode) && (td = @type_definition_stack.last)
           field_name = first_arg.unescaped
-          td = @type_definition_stack.last
           @current_field_definition = td.field_definition(field_name, node)
         else
           warn "GraphQL-Ruby warning: Skipping unrecognized field definition: #{node.inspect}"

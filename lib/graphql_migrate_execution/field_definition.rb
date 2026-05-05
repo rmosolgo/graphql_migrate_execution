@@ -12,6 +12,7 @@ module GraphqlMigrateExecution
       @type_instance_method = nil
       @object_direct_method = nil
       @dig = nil
+      @fallback_value = nil
       @already_migrated = nil
 
       @resolver_method = nil
@@ -55,6 +56,8 @@ module GraphqlMigrateExecution
         resolver_method.migration_strategy
       when :resolver
         DoNothing
+      when :fallback_value
+        FallbackValue
       else
         raise "No migration strategy for resolve_mode #{@resolve_mode.inspect}"
       end
@@ -73,7 +76,7 @@ module GraphqlMigrateExecution
 
     attr_writer :resolve_mode
 
-    attr_accessor :hash_key, :object_direct_method, :type_instance_method, :resolver, :dig, :already_migrated
+    attr_accessor :hash_key, :object_direct_method, :type_instance_method, :resolver, :dig, :already_migrated, :fallback_value
 
     def path
       @path ||= "#{type_definition.name}.#{@name}"

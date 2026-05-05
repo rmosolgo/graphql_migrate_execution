@@ -107,11 +107,14 @@ module GraphqlMigrateExecution
       @result_source.sub!(old_method, new_double_definition)
     end
 
+
     def remove_resolver_method(field_definition)
-      src_pattern = /(\n*)(#{Regexp.quote(field_definition.resolver_method.source)})(\n*)/
-      @result_source.sub!(src_pattern) do
-        # $2 includes a newline, too
-        "#{$1.length > 1 ? "\n" : ""}#{$3.length > 0 ? "\n" : ""}"
+      if field_definition.resolver_method
+        src_pattern = /(\n*)(#{Regexp.quote(field_definition.resolver_method.source)})(\n*)/
+        @result_source.sub!(src_pattern) do
+          # $2 includes a newline, too
+          "#{$1.length > 1 ? "\n" : ""}#{$3.length > 0 ? "\n" : ""}"
+        end
       end
     end
   end

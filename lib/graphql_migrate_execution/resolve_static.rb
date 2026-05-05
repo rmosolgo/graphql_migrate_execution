@@ -11,6 +11,7 @@ module GraphqlMigrateExecution
 
     def cleanup(field_definition)
       remove_field_keyword(field_definition, :resolver_method)
+      remove_field_keyword(field_definition, :fallback_value)
       remove_resolver_method(field_definition)
     end
   end
