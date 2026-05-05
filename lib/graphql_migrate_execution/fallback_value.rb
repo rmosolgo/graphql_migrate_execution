@@ -7,7 +7,7 @@ module GraphqlMigrateExecution
     def migrate(field_definition)
       indent = field_definition.node.location.slice_lines[/^ +/]
       method_name = field_definition.name
-      new_body = "\n" + indent + "def self.class.#{method_name}(context)\n"
+      new_body = "\n" + indent + "def self.#{method_name}(context)\n"
       new_body << indent + "  #{field_definition.fallback_value}\n"
       new_body << indent + "end"
 

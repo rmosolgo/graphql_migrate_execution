@@ -30,13 +30,13 @@ FallbackValue (2):
     class Thing < Types::BaseObject
       field :user_points, Int, fallback_value: 100, resolve_static: true
 
-      def self.class.user_points(context)
+      def self.user_points(context)
         100
       end
 
       field :user_ranking, Int, fallback_value: TOP_20, resolve_static: true
 
-      def self.class.user_ranking(context)
+      def self.user_ranking(context)
         TOP_20
       end
     end
@@ -48,13 +48,13 @@ FallbackValue (2):
     class Thing < Types::BaseObject
       field :user_points, Int, resolve_static: true
 
-      def self.class.user_points(context)
+      def self.user_points(context)
         100
       end
 
       field :user_ranking, Int, resolve_static: true
 
-      def self.class.user_ranking(context)
+      def self.user_ranking(context)
         TOP_20
       end
     end
