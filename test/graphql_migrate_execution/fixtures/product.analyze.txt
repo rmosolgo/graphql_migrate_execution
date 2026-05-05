@@ -1,4 +1,4 @@
-test/graphql_migrate_execution/fixtures/product.rb: Found 9 field definitions:
+test/graphql_migrate_execution/fixtures/product.rb: Found 10 field definitions:
 
 Implicit (1):
 
@@ -16,7 +16,8 @@ ResolveEach (2):
   - Product.price_in_cents      (:type_instance_method -> :price) @ test/graphql_migrate_execution/fixtures/product.rb:6
   - Product.viewer_can_afford   (:type_instance_method -> :viewer_can_afford) @ test/graphql_migrate_execution/fixtures/product.rb:14
 
-ResolveStatic (2):
+ResolveStatic (3):
 
   - Product.trending   (:type_instance_method -> :trending) @ test/graphql_migrate_execution/fixtures/product.rb:22
   - Product.on_sale    (:type_instance_method -> :is_on_sale) @ test/graphql_migrate_execution/fixtures/product.rb:28
+  - Product.f8         (:type_instance_method -> :f8) @ test/graphql_migrate_execution/fixtures/product.rb:37

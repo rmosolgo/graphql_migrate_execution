@@ -69,6 +69,9 @@ module GraphqlMigrateExecution
       else
         new_definition_source = if field_definition_source[/ [a-z_]+:/] # Does it already have keywords?
           field_definition_source.sub(/(field.+?)((?:,$)|(?: do)|(?: {)|$)/, "\\1, #{pair}\\2")
+        elsif (block_node = field_definition.node.block)
+          block_source = block_node.location.slice
+          field_definition_source.sub(" " + block_source, ", #{pair} #{block_source}")
         else
           field_definition_source + ", #{pair}"
         end

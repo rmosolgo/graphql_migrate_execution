@@ -33,5 +33,13 @@ module Types
 
     field :diggable, String, dig: ["key1", "key2"]
     field :resolver_field, Integer, resolver: Resolvers::SomeResolver
+
+    field :f8, String, resolve_static: true do
+      argument :input, PickyString
+    end
+
+    def self.f8(context, input:)
+      input
+    end
   end
 end

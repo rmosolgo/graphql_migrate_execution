@@ -1,4 +1,4 @@
-test/graphql_migrate_execution/fixtures/product.cleanup.rb: Found 9 field definitions:
+test/graphql_migrate_execution/fixtures/product.cleanup.rb: Found 10 field definitions:
 
 Implicit (1):
 
@@ -16,7 +16,8 @@ ResolveEach (2):
   - Product.price_in_cents      (:already_migrated -> {resolve_each: :price}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:6
   - Product.viewer_can_afford   (:already_migrated -> {resolve_each: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:14
 
-ResolveStatic (2):
+ResolveStatic (3):
 
   - Product.trending   (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:22
   - Product.on_sale    (:already_migrated -> {resolve_static: :is_on_sale}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:28
+  - Product.f8         (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:37
