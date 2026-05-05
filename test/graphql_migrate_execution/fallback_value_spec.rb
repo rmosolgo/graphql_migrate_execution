@@ -10,17 +10,20 @@ describe "FallbackValue migration strategy" do
       field :user_points, Int, fallback_value: 100
 
       field :user_ranking, Int, fallback_value: TOP_20
+
+      field :user_name, String, fallback_value: "Alice"
     end
     RUBY
 
 
     expected_result = <<-TEXT
-app.rb: Found 2 field definitions:
+app.rb: Found 3 field definitions:
 
-FallbackValue (2):
+FallbackValue (3):
 
-  - Thing.user_points    (:fallback_value -> 100) @ app.rb:2
+  - Thing.user_points    (:fallback_value -> "100") @ app.rb:2
   - Thing.user_ranking   (:fallback_value -> "TOP_20") @ app.rb:4
+  - Thing.user_name      (:fallback_value -> "\\"Alice\\"") @ app.rb:6
 
     TEXT
     assert_equal expected_result, analyze(input)
@@ -30,14 +33,20 @@ FallbackValue (2):
     class Thing < Types::BaseObject
       field :user_points, Int, fallback_value: 100, resolve_static: true
 
-      def self.user_points(context)
+      def self.user_points(_context)
         100
       end
 
       field :user_ranking, Int, fallback_value: TOP_20, resolve_static: true
 
-      def self.user_ranking(context)
+      def self.user_ranking(_context)
         TOP_20
+      end
+
+      field :user_name, String, fallback_value: "Alice", resolve_static: true
+
+      def self.user_name(_context)
+        "Alice"
       end
     end
     RUBY
@@ -48,14 +57,20 @@ FallbackValue (2):
     class Thing < Types::BaseObject
       field :user_points, Int, resolve_static: true
 
-      def self.user_points(context)
+      def self.user_points(_context)
         100
       end
 
       field :user_ranking, Int, resolve_static: true
 
-      def self.user_ranking(context)
+      def self.user_ranking(_context)
         TOP_20
+      end
+
+      field :user_name, String, resolve_static: true
+
+      def self.user_name(_context)
+        "Alice"
       end
     end
     RUBY
