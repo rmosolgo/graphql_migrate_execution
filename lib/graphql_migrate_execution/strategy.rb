@@ -65,7 +65,7 @@ module GraphqlMigrateExecution
       if field_definition_source.include?(pair)
         # Pass, don't re-add it
       elsif field_definition_source.include?("#{keyword}:")
-        raise "Can't re-inject #{keyword} because it's already present in the definition:\n\n#{field_definition_source}"
+        warn "Can't re-inject #{keyword} because it's already present in the definition:\n\n#{field_definition_source}"
       else
         new_definition_source = if field_definition_source[/ [a-z_]+:/] # Does it already have keywords?
           field_definition_source.sub(/(field.+?)((?:,$)|(?: do)|(?: {)|$)/, "\\1, #{pair}\\2")

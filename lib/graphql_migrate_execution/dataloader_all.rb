@@ -58,6 +58,9 @@ module GraphqlMigrateExecution
       when /^("[a-zA-Z0-9 :_\.]+"|:[a-zA-Z0-9_]+)$/
         # Constant literal
         "Array.new(objects.size, #{$1})"
+      when /^([a-z_0-9]+)$/
+        # Local variable or receiverless method
+        "Array.new(objects.size, #{$1})"
       else
         raise ArgumentError, "Failed to transform Dataloader argument: #{old_load_arg_s.inspect}"
       end

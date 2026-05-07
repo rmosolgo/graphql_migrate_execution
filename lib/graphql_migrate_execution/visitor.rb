@@ -68,7 +68,7 @@ module GraphqlMigrateExecution
     end
 
     def visit_call_node(node)
-      if node.receiver.nil? && node.name == :field
+      if node.receiver.nil? && node.name == :field && node.arguments
         first_arg = node.arguments.arguments.first # rubocop:disable Development/ContextIsPassedCop
         if first_arg.is_a?(Prism::SymbolNode) && (td = @type_definition_stack.last)
           field_name = first_arg.unescaped
