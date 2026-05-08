@@ -56,8 +56,10 @@ module GraphqlMigrateExecution
               @current_field_definition.resolve_mode = :already_migrated
               @current_field_definition.already_migrated = { assoc.key.unescaped.to_sym => get_keyword_value(assoc.value) }
             when "fallback_value"
-              @current_field_definition.resolve_mode ||= :fallback_value
-              @current_field_definition.fallback_value = self.class.source_for_constant_node(assoc.value)
+              if !assoc.value.is_a?(Prism::NilNode)
+                @current_field_definition.resolve_mode ||= :fallback_value
+                @current_field_definition.fallback_value = self.class.source_for_constant_node(assoc.value)
+              end
             else
               # fallback_value,  connection, extensions, extras, resolver, mutation, subscription
               @current_field_definition.unknown_options << assoc.key.unescaped

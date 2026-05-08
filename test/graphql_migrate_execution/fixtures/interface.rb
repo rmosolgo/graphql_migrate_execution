@@ -7,5 +7,5 @@ module SomeInterface
     object.graphql_object_name
   end
 
-  field :title, String
+  field :title, String, fallback_value: "King Kong"
 end

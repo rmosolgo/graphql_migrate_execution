@@ -7,9 +7,25 @@ module GraphqlMigrateExecution
     def migrate(field_definition)
       indent = field_definition.node.location.slice_lines[/^ +/]
       method_name = self.class.prefix_if_necessary(field_definition.name)
-      new_body = "\n" + indent + "def self.#{method_name}(_context)\n"
-      new_body << indent + "  #{field_definition.fallback_value}\n"
-      new_body << indent + "end"
+      is_interface = field_definition.type_definition.is_interface
+      new_body = "\n".dup
+
+      if is_interface
+        method_prefix = "def #{method_name}"
+        new_body << "#{indent}resolver_methods do\n"
+        method_indent = indent + "  "
+      else
+        method_prefix = "def self.#{method_name}"
+        method_indent = indent
+      end
+
+      new_body << "#{method_indent}#{method_prefix}(_context)\n"
+      new_body << method_indent + "  #{field_definition.fallback_value}\n"
+      new_body << method_indent + "end"
+
+      if is_interface
+        new_body << "\n#{indent}end"
+      end
 
       @result_source.sub!(field_definition.source, field_definition.source + "\n" + new_body)
       keyword_v = method_name == field_definition.name.to_s ? true : method_name.to_sym.inspect

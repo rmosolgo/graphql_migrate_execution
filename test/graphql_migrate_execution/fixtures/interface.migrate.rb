@@ -13,5 +13,11 @@ module SomeInterface
     self.class.resolve_name(object, context)
   end
 
-  field :title, String
+  field :title, String, fallback_value: "King Kong", resolve_static: true
+
+  resolver_methods do
+    def title(_context)
+      "King Kong"
+    end
+  end
 end
