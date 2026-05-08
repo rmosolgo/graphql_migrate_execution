@@ -90,18 +90,31 @@ module GraphqlMigrateExecution
       resolver_method = field_definition.resolver_method
       method_name = resolver_method.name
       old_method = resolver_method.source
-      new_class_method = old_method
-        .sub("def ", 'def self.')
+      method_prefix = field_definition.type_definition.is_interface ? "def " : "def self."
+      new_class_method = old_method.sub("def ", method_prefix)
 
       if resolver_method.parameter_names.empty?
         new_class_method.sub!(method_name.to_s, "#{method_name}(#{new_params})")
       else
-        new_class_method.sub!("def self.#{method_name}(", "def self.#{method_name}(#{new_params}, ")
+        new_class_method.sub!("#{method_prefix}#{method_name}(", "#{method_prefix}#{method_name}(#{new_params}, ")
+      end
+
+      if field_definition.type_definition.is_interface
+        indent = new_class_method[/\A +/]
+        new_class_method.gsub!(/^#{indent}/, "#{indent}  ")
+        new_class_method = "#{indent}resolver_methods do\n#{new_class_method}#{indent}end\n"
       end
 
       old_lines = old_method.split("\n")
-      new_body = old_lines.first[/^ +/] + "  self.class.#{method_name}(#{new_params}#{resolver_method.parameter_names.map { |n| ", #{n}: #{n}"}.join})"
-      new_inst_method = [old_lines.first, new_body, old_lines.last].join("\n")
+      forward_previous_params = resolver_method.parameter_names.map { |n| ", #{n}: #{n}"}.join
+      if old_lines.size == 1
+        # TODO doesn't support `def ... =` syntax
+        previous_def = /def [^;]+;/.match(old_method)
+        new_inst_method = old_lines.first[/^ +/] + "#{previous_def} self.class.#{method_name}(#{new_params}#{forward_previous_params}); end"
+      else
+        new_body = old_lines.first[/^ +/] + "  self.class.#{method_name}(#{new_params}#{forward_previous_params})"
+        new_inst_method = [old_lines.first, new_body, old_lines.last].join("\n")
+      end
 
       new_double_definition = new_class_method + "\n" + new_inst_method + "\n"
       @result_source.sub!(old_method, new_double_definition)

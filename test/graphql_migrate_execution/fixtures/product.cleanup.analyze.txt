@@ -8,8 +8,8 @@ DoNothing (4):
 
   - Product.description      (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:5
   - Product.brand            (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:20
-  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:34
-  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:35
+  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:32
+  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:33
 
 ResolveEach (2):
 
@@ -19,5 +19,5 @@ ResolveEach (2):
 ResolveStatic (3):
 
   - Product.trending   (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:22
-  - Product.on_sale    (:already_migrated -> {resolve_static: :is_on_sale}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:28
-  - Product.f8         (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:37
+  - Product.on_sale    (:already_migrated -> {resolve_static: :is_on_sale}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:26
+  - Product.f8         (:already_migrated -> {resolve_static: true}) @ test/graphql_migrate_execution/fixtures/product.cleanup.rb:35

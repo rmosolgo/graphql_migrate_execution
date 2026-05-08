@@ -21,9 +21,7 @@ module Types
 
     field :trending, Boolean, resolve_static: true
 
-    def self.trending(context)
-      false
-    end
+    def self.trending(context); false; end
 
     field :on_sale, Boolean, resolve_static: :is_on_sale
 

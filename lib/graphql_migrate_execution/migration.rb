@@ -25,7 +25,11 @@ module GraphqlMigrateExecution
     attr_reader :colorable, :action_method, :implicit
 
     def run
-      Dir.glob(@glob).each do |filepath|
+      files = Dir.glob(@glob)
+      if files.size.zero?
+        warn "No files found for #{@glob.inspect}"
+      end
+      files.each do |filepath|
         source = File.read(filepath)
         action = Action.new(self, filepath, source)
         action.run

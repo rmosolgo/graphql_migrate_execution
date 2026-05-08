@@ -8,8 +8,8 @@ DoNothing (4):
 
   - Product.description      (:object_direct_method -> :long_description) @ test/graphql_migrate_execution/fixtures/product.rb:5
   - Product.brand            (:hash_key -> "brand") @ test/graphql_migrate_execution/fixtures/product.rb:20
-  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.rb:34
-  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.rb:35
+  - Product.diggable         (:dig -> ["key1", "key2"]) @ test/graphql_migrate_execution/fixtures/product.rb:32
+  - Product.resolver_field   (:resolver -> "Resolvers::SomeResolver") @ test/graphql_migrate_execution/fixtures/product.rb:33
 
 ResolveEach (2):
 
@@ -19,5 +19,5 @@ ResolveEach (2):
 ResolveStatic (3):
 
   - Product.trending   (:type_instance_method -> :trending) @ test/graphql_migrate_execution/fixtures/product.rb:22
-  - Product.on_sale    (:type_instance_method -> :is_on_sale) @ test/graphql_migrate_execution/fixtures/product.rb:28
-  - Product.f8         (:type_instance_method -> :f8) @ test/graphql_migrate_execution/fixtures/product.rb:37
+  - Product.on_sale    (:type_instance_method -> :is_on_sale) @ test/graphql_migrate_execution/fixtures/product.rb:26
+  - Product.f8         (:type_instance_method -> :f8) @ test/graphql_migrate_execution/fixtures/product.rb:35

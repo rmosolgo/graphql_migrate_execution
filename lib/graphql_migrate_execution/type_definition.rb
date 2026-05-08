@@ -7,9 +7,10 @@ module GraphqlMigrateExecution
       @field_definitions = {}
       @resolver_methods = {}
       @is_resolver = false
+      @is_interface
     end
 
-    attr_accessor :is_resolver, :migration
+    attr_accessor :is_resolver, :migration, :is_interface
 
     attr_reader :resolver_methods, :name, :field_definitions
 

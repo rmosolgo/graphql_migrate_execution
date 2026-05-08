@@ -21,9 +21,7 @@ module Types
 
     field :trending, Boolean
 
-    def trending
-      false
-    end
+    def trending; false; end
 
     field :on_sale, Boolean, resolver_method: :is_on_sale
 

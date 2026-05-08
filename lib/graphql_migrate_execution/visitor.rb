@@ -24,6 +24,7 @@ module GraphqlMigrateExecution
 
     def visit_module_node(node)
       td = @type_definitions[node.name]
+      td.is_interface = true
       @type_definition_stack << td
       super
     ensure
