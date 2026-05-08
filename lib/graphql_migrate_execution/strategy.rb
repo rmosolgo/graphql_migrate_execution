@@ -52,6 +52,23 @@ module GraphqlMigrateExecution
       attr_accessor :color
     end
 
+    # These methods conflict with built-in class methods,
+    # so when migrating them, prefix them.
+    METHODS_TO_RENAME = [
+      "name",
+      "fields",
+      "arguments",
+    ]
+
+    def self.prefix_if_necessary(method_name)
+      name_s = method_name.to_s
+      if METHODS_TO_RENAME.include?(name_s)
+        "resolve_#{method_name}"
+      else
+        name_s
+      end
+    end
+
     private
 
     def inject_resolve_keyword(field_definition, keyword)
@@ -88,15 +105,17 @@ module GraphqlMigrateExecution
 
     def replace_resolver_method(field_definition, new_params)
       resolver_method = field_definition.resolver_method
-      method_name = resolver_method.name
+      old_method_name = resolver_method.name.to_s
+      new_method_name = self.class.prefix_if_necessary(old_method_name)
       old_method = resolver_method.source
-      method_prefix = field_definition.type_definition.is_interface ? "def " : "def self."
-      new_class_method = old_method.sub("def ", method_prefix)
+
+      method_prefix = field_definition.type_definition.is_interface ? "def #{new_method_name}" : "def self.#{new_method_name}"
+      new_class_method = old_method.sub("def #{old_method_name}", method_prefix)
 
       if resolver_method.parameter_names.empty?
-        new_class_method.sub!(method_name.to_s, "#{method_name}(#{new_params})")
+        new_class_method.sub!(new_method_name, "#{new_method_name}(#{new_params})")
       else
-        new_class_method.sub!("#{method_prefix}#{method_name}(", "#{method_prefix}#{method_name}(#{new_params}, ")
+        new_class_method.sub!("#{method_prefix}(", "#{method_prefix}(#{new_params}, ")
       end
 
       if field_definition.type_definition.is_interface
@@ -110,9 +129,9 @@ module GraphqlMigrateExecution
       if old_lines.size == 1
         # TODO doesn't support `def ... =` syntax
         previous_def = /def [^;]+;/.match(old_method)
-        new_inst_method = old_lines.first[/^ +/] + "#{previous_def} self.class.#{method_name}(#{new_params}#{forward_previous_params}); end"
+        new_inst_method = old_lines.first[/^ +/] + "#{previous_def} self.class.#{new_method_name}(#{new_params}#{forward_previous_params}); end"
       else
-        new_body = old_lines.first[/^ +/] + "  self.class.#{method_name}(#{new_params}#{forward_previous_params})"
+        new_body = old_lines.first[/^ +/] + "  self.class.#{new_method_name}(#{new_params}#{forward_previous_params})"
         new_inst_method = [old_lines.first, new_body, old_lines.last].join("\n")
       end
 

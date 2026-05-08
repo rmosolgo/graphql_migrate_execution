@@ -70,7 +70,7 @@ module GraphqlMigrateExecution
     end
 
     def future_resolve_shorthand
-      method_name = resolver_method.name
+      method_name = Strategy.prefix_if_necessary(resolver_method.name).to_sym
       name == method_name ? true : method_name
     end
 

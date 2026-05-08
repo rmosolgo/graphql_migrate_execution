@@ -1,10 +1,10 @@
 module SomeInterface
   include Types::BaseInterface
 
-  field :id, ID, null: false
+  field :name, String, null: false
 
-  def id
-    object.global_id
+  def name
+    object.graphql_object_name
   end
 
   field :title, String

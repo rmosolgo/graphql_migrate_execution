@@ -11,7 +11,7 @@ describe "FallbackValue migration strategy" do
 
       field :user_ranking, Int, fallback_value: TOP_20
 
-      field :user_name, String, fallback_value: "Alice"
+      field :name, String, fallback_value: "Alice"
     end
     RUBY
 
@@ -23,7 +23,7 @@ FallbackValue (3):
 
   - Thing.user_points    (:fallback_value -> "100") @ app.rb:2
   - Thing.user_ranking   (:fallback_value -> "TOP_20") @ app.rb:4
-  - Thing.user_name      (:fallback_value -> "\\"Alice\\"") @ app.rb:6
+  - Thing.name           (:fallback_value -> "\\"Alice\\"") @ app.rb:6
 
     TEXT
     assert_equal expected_result, analyze(input)
@@ -43,9 +43,9 @@ FallbackValue (3):
         TOP_20
       end
 
-      field :user_name, String, fallback_value: "Alice", resolve_static: true
+      field :name, String, fallback_value: "Alice", resolve_static: :resolve_name
 
-      def self.user_name(_context)
+      def self.resolve_name(_context)
         "Alice"
       end
     end
@@ -67,9 +67,9 @@ FallbackValue (3):
         TOP_20
       end
 
-      field :user_name, String, resolve_static: true
+      field :name, String, resolve_static: :resolve_name
 
-      def self.user_name(_context)
+      def self.resolve_name(_context)
         "Alice"
       end
     end

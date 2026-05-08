@@ -1,16 +1,16 @@
 module SomeInterface
   include Types::BaseInterface
 
-  field :id, ID, null: false, resolve_each: true
+  field :name, String, null: false, resolve_each: :resolve_name
 
   resolver_methods do
-    def id(object, context)
-      object.global_id
+    def resolve_name(object, context)
+      object.graphql_object_name
     end
   end
 
-  def id
-    self.class.id(object, context)
+  def name
+    self.class.resolve_name(object, context)
   end
 
   field :title, String
