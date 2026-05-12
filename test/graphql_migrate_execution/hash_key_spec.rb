@@ -12,10 +12,14 @@ describe "HashKey migration strategy" do
         field :error, String
 
         def resolve
-          {
-            result: get_result,
-            error: get_error
-          }
+          if return_blank
+            {}
+          else
+            {
+              result: get_result,
+              error: get_error
+            }
+          end
         end
       end
     end
@@ -41,10 +45,14 @@ HashKey (2):
         field :error, String, hash_key: :error
 
         def resolve
-          {
-            result: get_result,
-            error: get_error
-          }
+          if return_blank
+            {}
+          else
+            {
+              result: get_result,
+              error: get_error
+            }
+          end
         end
       end
     end

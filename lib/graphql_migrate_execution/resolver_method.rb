@@ -139,7 +139,7 @@ module GraphqlMigrateExecution
     end
 
     def returns_string_hash?
-      return_expressions.any? { |exp_node| exp_node.is_a?(Prism::HashNode) && exp_node.elements.all? { |el| el.key.is_a?(Prism::StringNode) } }
+      return_expressions.any? { |exp_node| exp_node.is_a?(Prism::HashNode) && exp_node.elements.size > 0 && exp_node.elements.all? { |el| el.key.is_a?(Prism::StringNode) } }
     end
 
     private
