@@ -47,7 +47,8 @@ Check out the docs for refactors implemented by this tool:
   - [`ResolveStatic`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/ResolveStatic.html)
 - 💔 Not migratable:
   - [`NotImplemented`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/NotImplemented.html): This field couldn't be matched to a refactor
-  - [`UnsupportedCurrentPath`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/UnsupportedCurrentPath.html): uses `context[:current_path]` which isn't supported anymore - [`UnsupportedExtra`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/UnsupportedExtra.html): as at least one `extras: ...` configuration which isn't supported anymore
+  - [`UnsupportedCurrentPath`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/UnsupportedCurrentPath.html): uses `context[:current_path]` which isn't supported anymore
+  - [`UnsupportedExtra`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/UnsupportedExtra.html): as at least one `extras: ...` configuration which isn't supported anymore
 - Configuration:
   - [`DoNothing`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/DoNothing.html): Already includes future-compatible configuration
   - [`HashKey`](https://rmosolgo.github.io/graphql_migrate_execution/GraphqlMigrateExecution/HashKey.html): Can be migrated using `hash_key:` (especially useful for Resolvers and Mutations)
@@ -186,7 +187,6 @@ bundle exec rake test # TEST=test/...
 
 ## TODO
 
-- [ ] Interfaces: use a `resolver_methods` block with instance methods
 - [ ] `@object` is not migrated, only `object` is
 - [ ] `**kwargs` is not correctly migrated into `resolve_static` methods
 - [ ] Does `--cleanup` work on my app? I haven't run it yet.
